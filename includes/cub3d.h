@@ -6,7 +6,7 @@
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 16:43:09 by npalissi          #+#    #+#             */
-/*   Updated: 2025/03/26 12:51:36 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/03/26 20:27:15 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@
 #include <unistd.h>
 #include <math.h>
 #include "../lib/libft/libft.h"
+
+#include "../MacroLibX/includes/mlx.h"
+#include "../MacroLibX/includes/mlx_extended.h"
 
 #define W 26
 #define A 4
@@ -42,7 +45,9 @@ typedef struct s_player
 	float y;
 	float dir;
 	float angle;
-
+	float cos_angle;
+	float sin_angle;
+	
 	bool left_rotate;
 	bool right_rotate;
 	bool key_up;
@@ -50,6 +55,15 @@ typedef struct s_player
 	bool key_left;
 	bool key_right;
 }				t_player;
+
+typedef struct s_ray
+{
+    float x;
+    float y;
+    float cos_angle;
+    float sin_angle;
+    float dist;
+} t_ray;
 
 typedef struct s_map
 {

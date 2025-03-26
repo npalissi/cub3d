@@ -1,4 +1,3 @@
-
 #include "cub3d.h"
 
 #include <stdio.h>
@@ -34,13 +33,13 @@ void get_map(t_game *game)
 	char ** map = malloc(sizeof(char *) * 11);
 	map[0] = "111111111111";
 	map[1] = "100000000001";
-	map[2] = "100000000001";
-	map[3] = "100000000001";
-	map[4] = "100000000001";
+	map[2] = "100010000001";
+	map[3] = "100000001001";
+	map[4] = "100100000001";
 	map[5] = "100000000001";
 	map[6] = "100000100001";
 	map[7] = "100000000001";
-	map[8] = "100000000001";
+	map[8] = "100000100001";
 	map[9] = "100000000001";
 	map[10] = "111111111111";
 	map[11] = NULL;
@@ -66,63 +65,71 @@ float distance(float delta_x, float delta_y)
 
 float fixed_dist(float delta_x, float delta_y, t_game *game)
 {
-
-	float angle;
-	float dist;
-
-	angle = atan2(delta_y, delta_x) - game->player.angle;
-	dist = distance(delta_x,delta_y) * cos(angle);
-	return dist;
+    float angle = atan2(delta_y, delta_x) - game->player.angle;
+    float dist_squared = delta_x * delta_x + delta_y * delta_y;
+    return sqrt(dist_squared) * cos(angle);
 }
-
-void draw_line(t_game *game, float start_x, int i )
+void draw_line(t_game *game, float start_x, int i, mlx_color *pixels)
 {
+    float ray_x = game->player.x;
+    float ray_y = game->player.y;
+    float cos_angle = cos(start_x);
+    float sin_angle = sin(start_x);
 
-	float ray_x;
-	float ray_y;
-	float cos_angle;
-	float sin_angle;
+    while (!touch(game, ray_x, ray_y))
+    {
+        ray_x += cos_angle;
+        ray_y += sin_angle;
+    }
 
-	ray_x = game->player.x;
-	ray_y = game->player.y;
-	cos_angle = cos(start_x);
-	sin_angle = sin(start_x);
-	while(!touch(game, ray_x, ray_y))
-	{
-		ray_x += cos_angle;
-		ray_y += sin_angle;
-	}
-	float dist = fixed_dist(ray_x - game->player.x, ray_y - game->player.y, game);
-	float height = (BLOCK_SIZE / dist) * (WIDTH / 2);
-	int start_y = (HEIGHT - height) / 2;
-	int end = start_y + height;
-	while(start_y < end)
-	{
-		mlx_pixel_put(game->mlx, game->win, i , start_y, (mlx_color){.rgba = 0x00FF00FF});
-		start_y++;
-	}
+    float delta_x = ray_x - game->player.x;
+    float delta_y = ray_y - game->player.y;
+    float dist = fixed_dist(delta_x, delta_y, game);
+    float height = (BLOCK_SIZE / dist) * (WIDTH / 2);
+    float start_y = (HEIGHT - height) / 2;
+    int end = start_y + height;
+
+    for (int y = start_y; y < end; y++)
+    {
+        if (y >= 0 && y < HEIGHT) // Vérifier que le pixel est dans les limites de l'écran
+        {
+            pixels[y * WIDTH + i].rgba = 0x00FF00FF; // Stocker la couleur dans le tableau
+        }
+    }
 }
 
 void draw_loop(void *params)
 {
-	t_game *game;
-	float fraction;
-	float start_x;
-	int i;
-	
-	i = 0;
-	game = params;
-	fraction = PI / 3 / WIDTH;
-	start_x = game->player.angle - PI / 6;
+    t_game *game = params;
 	mlx_clear_window(game->mlx, game->win, (mlx_color){.rgba = 0x000000FF});
-	while (i < WIDTH)
-	{
-		draw_line(game, start_x, i);
-		start_x += fraction;
-		i++;
-	}
-	pos_mouse(game);
-	move_player(&game->player, game);	
+	// Allouer un tableau de pixels pour l'écran entier
+    mlx_color *pixels = malloc(WIDTH * HEIGHT * sizeof(mlx_color));
+    if (!pixels)
+        return;
+
+    // Initialiser tous les pixels à une couleur de fond (par exemple, noir)
+    for (int i = 0; i < WIDTH * HEIGHT; i++)
+    {
+        pixels[i].rgba = 0x000000FF; // Couleur de fond (noir)
+    }
+
+    float fraction = PI / 3 / WIDTH;
+    float start_x = game->player.angle - PI / 6;
+
+    for (int i = 0; i < WIDTH; i++)
+    {
+        draw_line(game, start_x, i, pixels);
+        start_x += fraction;
+    }
+
+    // Afficher tous les pixels à l'écran
+    mlx_pixel_put_array(game->mlx, game->win, 0, 0, pixels, WIDTH * HEIGHT);
+
+    // Libérer le tableau de pixels
+    free(pixels);
+
+    pos_mouse(game);
+    move_player(&game->player, game);
 }
 
 void init_game(t_game *game)
@@ -136,6 +143,7 @@ void init_game(t_game *game)
 		.height = HEIGHT,
 		.is_resizable = false
 	};
+	mlx_set_fps_goal(game->mlx, 60);
 	game->win = mlx_new_window(game->mlx, &info);
 	mlx_mouse_get_pos(game->mlx, &game->mouse.x, &game->mouse.y);
 	game->mouse.is_press = 0;

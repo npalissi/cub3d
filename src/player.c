@@ -6,7 +6,7 @@
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 23:52:45 by npalissi          #+#    #+#             */
-/*   Updated: 2025/03/26 12:59:28 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/03/26 20:06:02 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,11 @@ void update_move_player(float x , float y, t_game *game)
 	}
 }
 
+void update_angle(t_player *player) {
+    player->cos_angle = cos(player->angle);
+    player->sin_angle = sin(player->angle);
+}
+
 void move_player(t_player *player, t_game *game)
 {
 	int speed;
@@ -134,9 +139,17 @@ void move_player(t_player *player, t_game *game)
 	speed = 3;
 
 	if (player->left_rotate)
+	{
 		player->angle -= angle_speed;
+		update_angle(player);
+	}
 	if (player->right_rotate)
+	{
 		player->angle += angle_speed;
+		update_angle(player);
+	}
+
+	
 
 	if (player->angle > 2 * PI)
 		player->angle = 0;
