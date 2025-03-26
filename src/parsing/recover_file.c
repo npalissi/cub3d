@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   recover_file.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npalissi <npalissi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 17:02:06 by npalissi          #+#    #+#             */
-/*   Updated: 2025/03/25 19:53:31 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/03/25 22:54:17 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ char *join_buffer(t_buffer *lst)
 	map = ft_strdup(tmp->buffer);
 	if (!map)
 		return (0);
+	tmp = tmp->next;
 	while(tmp)
 	{
 		map = ft_strjoinfree(map, tmp->buffer, FREE_S1);

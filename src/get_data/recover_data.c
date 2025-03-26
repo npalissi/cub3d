@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   recover_data.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npalissi <npalissi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 19:18:45 by npalissi          #+#    #+#             */
-/*   Updated: 2025/03/25 19:52:34 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/03/25 23:18:22 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ char *find_var_by_key(char *key, char *map)
 	str = ft_strstr(map, key) + ft_strlen(key);
 	while(*str && ft_iswhitespace(*str))
 		str++;
+	// printf("%s %s\n",key, str);
 	size = ft_strlenif(str, &ft_iswhitespace);
 	value = ft_substr(str, 0, size);
 	if (!value)
@@ -39,19 +40,52 @@ char *find_var_by_key(char *key, char *map)
 	return (value);
 }
 
+unsigned int rgba_to_hex(char *color)
+{
+	unsigned int hex;
+	char **rgb;
+	int overflow;
+	int i;
+	int j;
+
+
+	rgb = ft_split(color, ',');
+	if (!rgb)
+		return (0);
+	j = 0;
+	while(j < 3)
+	{
+		i = ft_atoi(rgb[j], &overflow);
+		if (overflow)
+			return (0);
+		if (i < 0 || i > 255)
+			return (0);
+		hex = (hex << 8) + i;
+		j++;
+	}
+	ft_free_tab(rgb);
+	return (hex);
+}
+
 int init_data(t_game *game)
 {
-	game->color.floor = find_var_by_key("F", game->str_map);
-	game->color.ceiling = find_var_by_key("C", game->str_map);
+	char *floor;
+	char *ceiling;
+
+	game->color = (t_color){0, 0};
+	game->mat = (t_mat){0, 0, 0, 0};
+	floor = find_var_by_key("F", game->str_map);
+	ceiling = find_var_by_key("C", game->str_map);
+	if (!floor || !ceiling)
+		return (0);
+	game->color.floor = rgba_to_hex(floor);
+	game->color.ceiling = rgba_to_hex(ceiling);
 	game->mat.north = find_var_by_key("NO", game->str_map);
-	// game->mat.south = find_var_by_key("SO", game->str_map);
-	// game->mat.west = find_var_by_key("WE", game->str_map);
-	// game->mat.east = find_var_by_key("EA", game->str_map);
-	printf("color Floor   :%s\n", game->color.floor);
-	printf("color Ceiling :%s\n", game->color.ceiling);
-	printf("mat   north   :%s\n", game->mat.north);
-	// printf("mat   south   :%s\n", game->mat.south);
-	// printf("mat   west    :%s\n", game->mat.west);
-	// printf("mat   east    :%s\n", game->mat.east);
+	game->mat.south = find_var_by_key("SO", game->str_map);
+	game->mat.west = find_var_by_key("WE", game->str_map);
+	game->mat.east = find_var_by_key("EA", game->str_map);
+	if (!game->color.floor || !game->color.ceiling || !game->mat.north 
+		|| !game->mat.south || !game->mat.west || !game->mat.east)
+		return (0);
 	return (1);
 }

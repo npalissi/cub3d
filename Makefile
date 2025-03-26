@@ -8,7 +8,7 @@ DIR_LIB     =   lib
 LIBFT_DIR   =  $(DIR_LIB)/libft
 LIBFT_LIB   := $(LIBFT_DIR)/libft.a
 # Source directories and files
-SRCS_DIRS   = src src/parsing src/get_data
+SRCS_DIRS   = src src/parsing src/get_data src/drawing
 SRCS        = $(foreach dir,$(SRCS_DIRS),$(wildcard $(dir)/*.c))
 
 # Verify sources exist
@@ -28,6 +28,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS) 
 	@make -C lib/libft
+	@make -C MacroLibX
 	@$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) lib/libft/libft.a -o $(NAME)
 
 # Rule to compile .c files to .o files
@@ -40,6 +41,10 @@ $(OBJS_DIR)/%.o: src/parsing/%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJS_DIR)/%.o: src/get_data/%.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	
+$(OBJS_DIR)/%.o: src/drawing/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
