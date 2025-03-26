@@ -6,7 +6,7 @@
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 16:43:09 by npalissi          #+#    #+#             */
-/*   Updated: 2025/03/26 02:08:04 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:51:36 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,14 @@ typedef struct s_player
 	bool key_right;
 }				t_player;
 
+typedef struct s_map
+{
+	char **map;
+	char *str;
+	int w;
+	int h;
+}				t_map;
+
 typedef struct	s_buffer
 {
 	char			buffer[5];
@@ -87,12 +95,12 @@ typedef struct s_game
 	void *win;
 	void *img;
 	char *str_map;
-	char **map;
 	t_player player;
 	t_buffer *lst_buffer;
 	t_color	color;
 	t_mat	mat;
 	t_mouse mouse;
+	t_map map;
 }			t_game;
 
 void pos_mouse(t_game *game);

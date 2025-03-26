@@ -16,11 +16,11 @@ void draw_map(t_game *game)
 {
 	int i = 0;
 	int j = 0;
-	while (game->map[i])
+	while (game->map.map[i])
 	{
-		while (game->map[i][j])
+		while (game->map.map[i][j])
 		{
-			if (game->map[i][j] == '1')
+			if (game->map.map[i][j] == '1')
 				draw_squar(game, j * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE);
 			j++;
 		}
@@ -44,7 +44,7 @@ void get_map(t_game *game)
 	map[9] = "100000000001";
 	map[10] = "111111111111";
 	map[11] = NULL;
-	game->map = map;
+	game->map.map = map;
 }
 
 bool touch(t_game *game, float x, float y)
@@ -54,9 +54,25 @@ bool touch(t_game *game, float x, float y)
 
 	i = y / BLOCK_SIZE;
 	j = x / BLOCK_SIZE;
-	if (game->map[i][j] == '1')
+	if (game->map.map[i][j] == '1')
 		return true;
 	return false;
+}
+
+float distance(float delta_x, float delta_y)
+{
+	return sqrt(delta_x * delta_x + delta_y * delta_y);
+}
+
+float fixed_dist(float delta_x, float delta_y, t_game *game)
+{
+
+	float angle;
+	float dist;
+
+	angle = atan2(delta_y, delta_x) - game->player.angle;
+	dist = distance(delta_x,delta_y) * cos(angle);
+	return dist;
 }
 
 void draw_line(t_game *game, float start_x, int i )
@@ -73,13 +89,10 @@ void draw_line(t_game *game, float start_x, int i )
 	sin_angle = sin(start_x);
 	while(!touch(game, ray_x, ray_y))
 	{
-		// mlx_pixel_put(game->mlx, game->win, ray_x, ray_y, (mlx_color){.rgba = 0x00FF00FF});
 		ray_x += cos_angle;
 		ray_y += sin_angle;
 	}
-
-	float dist = sqrt(pow(ray_x - game->player.x, 2) + pow(ray_y - game->player.y, 2));
-	// float dist = (ray_x - game->player.x, ray_y - game->player.y);
+	float dist = fixed_dist(ray_x - game->player.x, ray_y - game->player.y, game);
 	float height = (BLOCK_SIZE / dist) * (WIDTH / 2);
 	int start_y = (HEIGHT - height) / 2;
 	int end = start_y + height;
@@ -93,48 +106,55 @@ void draw_line(t_game *game, float start_x, int i )
 void draw_loop(void *params)
 {
 	t_game *game;
-	game = params;
-	mlx_clear_window(game->mlx, game->win, (mlx_color){.rgba = 0x000000FF});
 	float fraction;
 	float start_x;
 	int i;
 	
 	i = 0;
+	game = params;
 	fraction = PI / 3 / WIDTH;
 	start_x = game->player.angle - PI / 6;
+	mlx_clear_window(game->mlx, game->win, (mlx_color){.rgba = 0x000000FF});
 	while (i < WIDTH)
 	{
 		draw_line(game, start_x, i);
 		start_x += fraction;
 		i++;
 	}
-	
 	pos_mouse(game);
-	move_player(&game->player, game);
-	// printf("x %f y %f\n", game->player.x, game->player.y);
-	
-	// draw_squar(game, game->player.x, game->player.y, 20);
-	// draw_map(game);
+	move_player(&game->player, game);	
 }
 
-int main(void)
+void init_game(t_game *game)
 {
-	t_game game;
 
-	game.str_map = recover_file(&game, "test.txt");
-	// init_data(&game);
-	init_player(&game.player);
-	game.mouse.is_press = 0;
-	mlx_mouse_get_pos(game.mlx, &game.mouse.x, &game.mouse.y);
-	game.mlx = mlx_init();
-	get_map(&game);
+	game->mlx = mlx_init();
+	get_map(game);
 	mlx_window_create_info info = {
 		.title = "CUB3D",
 		.width = WIDTH,
 		.height = HEIGHT,
 		.is_resizable = false
 	};
-	game.win = mlx_new_window(game.mlx, &info);
+	game->win = mlx_new_window(game->mlx, &info);
+	mlx_mouse_get_pos(game->mlx, &game->mouse.x, &game->mouse.y);
+	game->mouse.is_press = 0;
+}
+
+
+
+
+int main(void)
+{
+	t_game game;
+
+	// game.str_map = recover_file(&game, "test.txt");
+	// init_data(&game);
+	init_player(&game.player);
+	init_game(&game);
+	
+	
+	
 	mlx_on_event(game.mlx, game.win, MLX_WINDOW_EVENT, close_win, &game);
 	mlx_on_event(game.mlx, game.win, MLX_KEYDOWN, &key_press, &game);
 	mlx_on_event(game.mlx, game.win, MLX_KEYUP, &key_release, &game);
