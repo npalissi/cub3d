@@ -30,6 +30,7 @@ SRCS := array/ft_arraydupe.c\
 		string/ft_atoi.c\
 		string/ft_buildstr.c\
 		string/ft_itoa.c\
+		string/ft_first_char.c\
 		string/ft_strapp.c\
 		string/ft_strchr.c\
 		string/ft_strcmp.c\

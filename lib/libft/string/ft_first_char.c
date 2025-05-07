@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_tab.c                                      :+:      :+:    :+:   */
+/*   ft_first_char.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/16 17:27:47 by edubois-          #+#    #+#             */
-/*   Updated: 2025/05/06 18:42:19 by edubois-         ###   ########.fr       */
+/*   Created: 2025/05/07 10:35:10 by edubois-          #+#    #+#             */
+/*   Updated: 2025/05/07 10:45:40 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-void	ft_free_tab(char **tab)
+int first_char(char *str, char c)
 {
-	char	**tmp;
+    int i;
 
-	if (!tab)
-		return ;
-	tmp = tab;
-	while (*tmp)
-		dh_free(*tmp++);
-	dh_free(tab);
+    i = 0;
+    while (str && str[i] && ft_iswhitespace(str[i]))
+        i++;
+    return (str[i] == c);
 }

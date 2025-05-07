@@ -1,25 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_tab.c                                      :+:      :+:    :+:   */
+/*   ft_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/16 17:27:47 by edubois-          #+#    #+#             */
-/*   Updated: 2025/05/06 18:42:19 by edubois-         ###   ########.fr       */
+/*   Created: 2024/10/22 16:33:17 by edubois-          #+#    #+#             */
+/*   Updated: 2024/11/29 23:11:14 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
+#include "ft_printf.h"
 
-void	ft_free_tab(char **tab)
+int	ft_putnbr(int fd, int n)
 {
-	char	**tmp;
+	int	len;
 
-	if (!tab)
-		return ;
-	tmp = tab;
-	while (*tmp)
-		dh_free(*tmp++);
-	dh_free(tab);
+	len = 0;
+	if (n == -2147483648)
+		return (write(fd, "-2147483648", 11));
+	else
+	{
+		if (n < 0)
+		{
+			n = -n;
+			len += ft_putchar(fd, '-');
+		}
+		if (n > 9)
+			len += ft_putnbr(fd, n / 10);
+		len += ft_putchar(fd, n % 10 + '0');
+	}
+	return (len);
 }

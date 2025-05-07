@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_tab.c                                      :+:      :+:    :+:   */
+/*   ft_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/16 17:27:47 by edubois-          #+#    #+#             */
-/*   Updated: 2025/05/06 18:42:19 by edubois-         ###   ########.fr       */
+/*   Created: 2024/10/22 16:32:27 by edubois-          #+#    #+#             */
+/*   Updated: 2024/12/11 16:35:08 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
+#include "ft_printf.h"
 
-void	ft_free_tab(char **tab)
+static int	ft_strlen(const char *str)
 {
-	char	**tmp;
+	const char	*tmp;
 
-	if (!tab)
-		return ;
-	tmp = tab;
+	tmp = str;
 	while (*tmp)
-		dh_free(*tmp++);
-	dh_free(tab);
+		tmp++;
+	return (tmp - str);
+}
+
+int	ft_putstr(int fd, char *str)
+{
+	if (!str)
+		return (ft_putstr(fd, "(null)"));
+	return (write(1, str, ft_strlen(str)));
 }

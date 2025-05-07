@@ -1,62 +1,77 @@
-# Compiler and flags
 NAME        = cub3d
+
 CC          = cc
+
 CFLAGS      = -Wall -Wextra -Werror -g
-LDFLAGS = -Wl,-rpath=./MacroLibX -L./MacroLibX -lmlx -lSDL2 -lm
-DIR_LIB     =   lib
 
-LIBFT_DIR   =  $(DIR_LIB)/libft
-LIBFT_LIB   := $(LIBFT_DIR)/libft.a
-# Source directories and files
-SRCS_DIRS   = src src/parsing src/get_data src/drawing
-SRCS        = $(foreach dir,$(SRCS_DIRS),$(wildcard $(dir)/*.c))
+LDFLAGS     = -Wl,-rpath=./lib/MacroLibX -L./lib/MacroLibX -lmlx -lSDL2 -lm
 
-# Verify sources exist
-ifeq ($(SRCS),)
-    $(error "No .c files found in $(SRCS_DIRS)")
-endif
+DIR_LIB     = lib
 
-# Objects
-OBJS_DIR    = obj
-OBJS        = $(SRCS:src/%.c=$(OBJS_DIR)/%.o)
+PRINTF_DIR  := $(DIR_LIB)/printf_fd
+PRINTF_LIB  := $(PRINTF_DIR)/libftprintf.a
 
-# Includes
-INCLUDES    = -I./includes -I./MacroLibX
+GNL_DIR  := $(DIR_LIB)/gnl
+GNL_LIB  := $(GNL_DIR)/gnl.a
 
-# Main rule
+LIBFT_DIR   = $(DIR_LIB)/libft
+LIBFT_LIB   = $(LIBFT_DIR)/libft.a
+
+SRCS = \
+	srcs/main.c \
+	srcs/get_data/get_map.c\
+	srcs/parsing/parse_map.c\
+	srcs/parsing/parsing_utils.c\
+	srcs/get_data/get_textures.c\
+
+OBJS_DIR = obj
+OBJS = $(SRCS:srcs/%.c=$(OBJS_DIR)/%.o)
+
+INCLUDES = -I./includes -I./lib/MacroLibX
+
 all: $(NAME)
 
-$(NAME): $(OBJS) 
-	@make -C lib/libft
-	@make -C MacroLibX
-	@$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) lib/libft/libft.a -o $(NAME)
+$(NAME): $(OBJS)
+	@echo "\033[1;34mCompiling libraries...\033[0m"
+	@echo "\033[1;33mCompiling libft...\033[0m"
+	@make -s -C $(LIBFT_DIR)
+	@echo "\033[1;33mCompiling print_fd...\033[0m"
+	@make -s -C $(PRINTF_DIR)
+	@echo "\033[1;33mCompiling get_next_line...\033[0m"
+	@make -s -C $(GNL_DIR)
+	@echo "\033[1;33mCompiling MacroLibX...\033[0m"
+	@make -s -C lib/MacroLibX -j16
+	@echo "\033[1;34mLinking executable...\033[0m"
+	@$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) $(LIBFT_LIB) $(PRINTF_LIB) $(GNL_LIB) -o $(NAME)
+	@echo "\033[1;32mCompilation finished successfully!\033[0m"
+	@sleep 0.7
+	@echo 
+	@echo "\033[1;34mCleaning terminal...\033[0m"
+	@sleep 0.8;
+	@clear
 
-# Rule to compile .c files to .o files
-$(OBJS_DIR)/%.o: src/%.c
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
-$(OBJS_DIR)/%.o: src/parsing/%.c
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
-$(OBJS_DIR)/%.o: src/get_data/%.c
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-	
-$(OBJS_DIR)/%.o: src/drawing/%.c
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
+# Compilation des fichiers .o
+$(OBJS_DIR)/%.o: srcs/%.c
+	@mkdir -p $(dir $@)  # Crée le répertoire nécessaire dans obj/
+	@printf "[\033[1;33mCompiling\033[0m] %-30s" "$<"
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ && echo " \033[1;32m[OK]\033[0m" || echo " \033[1;31m[FAIL]\033[0m"
 
 clean:
-	rm -rf $(OBJS_DIR)
-	make clean -C lib/libft
+	@rm -rf $(OBJS_DIR)
+	@make -s clean -C $(LIBFT_DIR)
+	@make -s clean -C $(PRINTF_DIR)
+	@make -s clean -C $(GNL_DIR)
+	@make -s clean -C lib/MacroLibX
+	@echo "\033[1;34mCleaned all object files.\033[0m"
 
 fclean: clean
-	rm -f $(NAME)
-	make fclean -C lib/libft
+	@rm -f $(NAME)
+	@make -s fclean -C $(LIBFT_DIR)
+	@make -s fclean -C $(PRINTF_DIR)
+	@make -s fclean -C $(GNL_DIR)
+	@make -s fclean -C lib/MacroLibX
+	@echo "\033[1;34mFull clean done.\033[0m"
 
 re: fclean all
-	make re -C lib/libft
+
 .PHONY: all clean fclean re

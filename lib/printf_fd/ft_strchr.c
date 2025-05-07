@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_tab.c                                      :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/16 17:27:47 by edubois-          #+#    #+#             */
-/*   Updated: 2025/05/06 18:42:19 by edubois-         ###   ########.fr       */
+/*   Created: 2024/10/22 20:51:06 by edubois-          #+#    #+#             */
+/*   Updated: 2024/10/22 22:36:56 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
+#include "ft_printf.h"
 
-void	ft_free_tab(char **tab)
+char	*ft_strchr(const char *s, int c)
 {
-	char	**tmp;
-
-	if (!tab)
-		return ;
-	tmp = tab;
-	while (*tmp)
-		dh_free(*tmp++);
-	dh_free(tab);
+	while (*s)
+	{
+		if (*s++ == (unsigned char)c)
+			return ((char *)s - 1);
+	}
+	if (!(unsigned char)c)
+		return ((char *)s);
+	return (0);
 }
