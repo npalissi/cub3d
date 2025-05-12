@@ -7,6 +7,7 @@ SRCS := array/ft_arraydupe.c\
 		char/ft_isascii.c\
 		char/ft_isdigit.c\
 		char/ft_isprint.c\
+		char/ft_charite.c\
 		char/ft_issign.c\
 		char/ft_iswhitespace.c\
 		lst/ft_lstadd_back_bonus.c\

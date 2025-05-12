@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:58:51 by edubois-          #+#    #+#             */
-/*   Updated: 2025/05/07 13:35:58 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:05:46 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,12 @@ void    fill_map_line(char ***map, int fd)
 	}
 }
 
-int get_map(char *file, char ***map)
+int get_map(char *file, t_game *game)
 {
     int fd;
+    t_map map;
 
+    map.map = NULL;
     fd = open (file, O_RDONLY);
     if (fd == -1)
     {
@@ -41,9 +43,10 @@ int get_map(char *file, char ***map)
         ft_printf(2, "Bad file format, must be .cub\n");
         return (0);
     }
-    fill_map_line(map, fd);
+    fill_map_line(&map.map, fd);
     close(fd);
-    if (!parse_map(*map))
+    if (!parse_map(map.map))
         return (0);
+    game->map = map;
     return (1);
 }

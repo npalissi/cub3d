@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 10:15:04 by edubois-          #+#    #+#             */
-/*   Updated: 2025/05/07 13:53:30 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:52:07 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,43 +52,54 @@ int is_in_bounds(char **map, int x, int y, int height)
     return 1;
 }
 
-int flood_fill(char **map, int x, int y, int height, int width)
+int flood_fill(char **map, int x, int y, int hw[2])
 {
-    int right;
-	int left ;
-	int down ;
-	int up;
-	
-	if (!is_in_bounds(map, x, y, height))
+    int right, left, down, up;
+    int height = hw[0];
+    int width = hw[1];
+
+    if (!is_in_bounds(map, x, y, height, width))
         return 0;
     if (map[y][x] != EMPTY && map[y][x] != 'N' && map[y][x] != 'S'
         && map[y][x] != 'E' && map[y][x] != 'W')
         return 1;
+
     map[y][x] = VISITED;
-	right = flood_fill(map, x + 1, y, height, width);
-	left = flood_fill(map, x - 1, y, height, width);
-	down = flood_fill(map, x, y + 1, height, width);
-    up = flood_fill(map, x, y - 1, height, width);
+
+    right = flood_fill(map, x + 1, y, hw);
+    left  = flood_fill(map, x - 1, y, hw);
+    down  = flood_fill(map, x, y + 1, hw);
+    up    = flood_fill(map, x, y - 1, hw);
+
     return (right && left && down && up);
 }
 
+
 int parse_map(char **map)
 {
-	int i = 0;
-	
-	while (map[i] && !first_char(map[i], '1'))
-		i++;
-	if (!map[i])
-	{
-		ft_printf(2, "Error, Need map in config file !\n");
-		return (0);
-	}
-	fill_map(map, i);
-	if (!flood_fill(map, find_y(map, i), find_x(map, i),
-		ft_arraylen(map), len_max(map) - 1))
-	{
-		ft_printf(2, "Error, The map needs to be closed !\n");
-		return (0);
-	}
-	return (1);
+    int i = 0;
+    int hw[2];
+
+    while (map[i] && !first_char(map[i], '1'))
+        i++;
+    if (!map[i])
+    {
+        ft_printf(2, "Error, Need map in config file !\n");
+        return (0);
+    }
+    fill_map(map, i);
+    hw[0] = ft_arraylen(map);
+    hw[1] = len_max(map) - 1;
+    if (!flood_fill(map, find_x(map, i), find_y(map, i), hw))
+    {
+        ft_printf(2, "Error, The map needs to be closed !\n");
+        return (0);
+    }
+    return (1);
+}
+
+void	cut_map(t_game *game)
+{
+	while (*game->map.map && (!first_char(*game->map.map, '1') && !(first_char(*game->map.map, '0'))))
+		game->map.map++;
 }
