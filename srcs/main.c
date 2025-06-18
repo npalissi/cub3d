@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:04:05 by edubois-          #+#    #+#             */
-/*   Updated: 2025/05/12 14:14:39 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/18 14:14:13 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,9 @@ int main(int argc, char **argv)
 			ft_printf(2, "Need 1 file name as argument\n");
 		return (1);
 	}
-	cut_map(&game);
-	print_map(game.map.map);
-	print_texture(game.texture);
-	print_color(game.color);
+	if (cut_map(&game))
+		printf("GOOD\n");
+	// print_map(game.map.map);
+	// print_texture(game.texture);
+	// print_color(game.color);
 }

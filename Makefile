@@ -25,6 +25,8 @@ SRCS = \
 	srcs/get_data/get_textures.c\
 	srcs/get_data/get_colors.c\
 	srcs/parsing/parse_colors.c\
+	srcs/utils/print_utils.c\
+	srcs/parsing/parse_params.c\
 
 OBJS_DIR = obj
 OBJS = $(SRCS:srcs/%.c=$(OBJS_DIR)/%.o)

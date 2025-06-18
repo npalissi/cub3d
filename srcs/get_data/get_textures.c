@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 13:53:41 by edubois-          #+#    #+#             */
-/*   Updated: 2025/05/12 13:46:57 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/09 14:27:04 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,7 @@ int get_textures(t_game *game)
         while (!ft_strcmp(ft_substr(*game->map.map, 0, 3), co[i]) && *game->map.map)
             game->map.map++;
         if (*game->map.map)
-        {
-            fill_texture(&game->texture, i, ft_substr(*game->map.map, 2, ft_strlen(*game->map.map) - 3));
-            i++;
-        }
+            fill_texture(&game->texture, i++, ft_substr(*game->map.map, 2, ft_strlen(*game->map.map) - 3));
         else
         {
             ft_printf(2, "Error, Not all textures path are there ! Missing at least: %s\n", co[i]);
