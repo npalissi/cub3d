@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "unistd.h": "c",
-        "mlx.h": "c",
-        "cub3d.h": "c",
-        "map": "c",
-        "format": "c"
-    }
-}

@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 16:43:09 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/18 13:48:10 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:53:33 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #define WALL '1'
 #define EMPTY '0'
 #define VISITED 'F'
+
 
 // Reset
 #define RESET       "\033[0m"
@@ -41,6 +42,7 @@
 #define BWHITE      "\033[1;37m"
 
 #include "../MacroLibX/includes/mlx.h"
+#include "raycasting.h"
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -54,41 +56,11 @@
 #include "../lib/MacroLibX/includes/mlx.h"
 #include "../lib/MacroLibX/includes/mlx_extended.h"
 
-typedef struct s_map
-{
-	char **map;
-	char *str;
-	int w;
-	int h;
-}				t_map;
-
-typedef struct s_color
-{
-	unsigned int floor;
-	unsigned int ceiling;
-}				t_color;
-
-typedef struct s_texture
-{
-	char *north;
-	char *south;
-	char *west;
-	char *east;	
-}			t_texture;
-
-typedef struct s_game
-{
-	void *mlx;
-	void *win;
-	void *img;
-	char *str_map;
-	// t_player player;
-	// t_buffer *lst_buffer;
-	t_color	color;
-	t_texture	texture;
-	// t_mouse mouse;
-	t_map map;
-}			t_game;
+// Forward declarations - les vraies structures sont dans raycasting.h
+typedef struct s_map t_map;
+typedef struct s_color t_color;
+typedef struct s_texture t_texture;
+typedef struct s_game t_game;
 
 
 // get_data
@@ -97,11 +69,11 @@ int get_textures(t_game *game);
 int get_colors(t_game *game);
 
 // parsing
-int parse_map(char **map);
+int parse_map(char **map, t_game *game);
 int len_max(char **str);
 int     find_x(char **map, int i);
 int     find_y(char **map, int i);
-unsigned int rgba_to_hex(char *color, int *overflow);
+mlx_color rgba_to_hex(char *color, int *overflow);
 int	cut_map(t_game *game);
 int count_occurrences(char *key, char **map);
 int    parse_occu(char **map);

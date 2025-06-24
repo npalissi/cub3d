@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/06/24 16:10:21 by edubois-          #+#    #+#              #
+#    Updated: 2025/06/24 16:10:22 by edubois-         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME        = cub3d
 
 CC          = cc
@@ -27,6 +39,18 @@ SRCS = \
 	srcs/parsing/parse_colors.c\
 	srcs/utils/print_utils.c\
 	srcs/parsing/parse_params.c\
+	srcs/player/player.c\
+	srcs/player/player_move.c\
+	srcs/player/player_utils.c\
+	srcs/raycasting/init.c\
+	srcs/raycasting/lighting.c\
+	srcs/raycasting/raycasting_utils.c\
+	srcs/raycasting/raycasting.c\
+	srcs/raycasting/render_utils.c\
+	srcs/raycasting/render.c\
+	srcs/raycasting/game.c\
+	srcs/raycasting/minimap.c\
+
 
 OBJS_DIR = obj
 OBJS = $(SRCS:srcs/%.c=$(OBJS_DIR)/%.o)

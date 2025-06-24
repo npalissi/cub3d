@@ -30,10 +30,8 @@ int len_max(char **str)
 
 int     find_y(char **map, int i)
 {
-    int find;
     int y;
 
-    find = 0;
     while (map[i])
     {
         y = 0;

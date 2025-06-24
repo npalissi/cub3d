@@ -1,0 +1,23 @@
+# Object files
+*.o
+*.a
+*.so
+
+# Executable
+cub3d
+
+# Build directories
+obj/
+
+# IDE files
+.vscode/
+*.swp
+*~
+
+# Debug files
+*.dSYM/
+core
+vgcore.*
+
+# Temporary files
+output.txt

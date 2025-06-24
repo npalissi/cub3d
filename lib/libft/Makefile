@@ -2,6 +2,7 @@ SRCS := array/ft_arraydupe.c\
 		array/ft_arraylen.c\
 		array/ft_free_tab.c\
 		array/ft_split.c\
+		array/ft_array_replace.c\
 		char/ft_isalnum.c\
 		char/ft_isalpha.c\
 		char/ft_isascii.c\
@@ -27,6 +28,7 @@ SRCS := array/ft_arraydupe.c\
 		put/ft_putchar_fd.c\
 		put/ft_putendl_fd.c\
 		put/ft_putnbr_fd.c\
+		put/ft_print_array.c\
 		put/ft_putstr_fd.c\
 		string/ft_atoi.c\
 		string/ft_buildstr.c\

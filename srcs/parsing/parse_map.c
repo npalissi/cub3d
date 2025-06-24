@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 10:15:04 by edubois-          #+#    #+#             */
-/*   Updated: 2025/06/18 14:13:32 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:54:39 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int flood_fill(char **map, int x, int y, int height)
     return (right && left && down && up);
 }
 
-int parse_map(char **map)
+int parse_map(char **map, t_game *game)
 {
 	int i;
 	char **save_map;
@@ -85,6 +85,7 @@ int parse_map(char **map)
 		ft_printf(2, "Error, Need map in config file !\n");
 		return (0);
 	}
+	game->mini.map = ft_arraydupe(map + i);
 	fill_map(map, i);
 	save_map = ft_arraydupe(map);
 	if (!flood_fill(save_map, find_y(save_map, i), find_x(save_map, i),
@@ -141,5 +142,8 @@ int	cut_map(t_game *game)
 			" once and not %d times!\n", stat[0] + stat[1] + stat[2] + stat[3]);
 		return (0);
 	}
+	// Calculer les dimensions de la carte
+	game->map.h = i;
+	game->map.w = len_max(game->map.map);
 	return (error);
 }
