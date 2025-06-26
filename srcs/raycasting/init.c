@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/25 14:04:03 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:29:13 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	init_pixel(t_game *game)
 		y++;
 	}
 }
-
 void	fill_crowbar(t_game *game, char crowbar[50])
 {
 	int y;
@@ -66,7 +65,9 @@ void	fill_crowbar(t_game *game, char crowbar[50])
 		x = 0;
 		while (x < 919)
 		{
-			game->bar.c[y * 919 + x] = mlx_get_image_pixel(game->mlx, game->bar.bar, x, y);
+			mlx_color	*pixel = &game->bar.c[y * 919 + x];
+			
+			*pixel = mlx_get_image_pixel(game->mlx, game->bar.bar, x, y);
 			x++;
 		}
 		y++;
