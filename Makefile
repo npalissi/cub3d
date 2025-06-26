@@ -6,7 +6,7 @@
 #    By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/24 16:10:21 by edubois-          #+#    #+#              #
-#    Updated: 2025/06/24 16:10:22 by edubois-         ###   ########.fr        #
+#    Updated: 2025/06/26 13:55:51 by edubois-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC          = cc
 
 CFLAGS      = -Wall -Wextra -Werror -g
 
-LDFLAGS     = -Wl,-rpath=./lib/MacroLibX -L./lib/MacroLibX -lmlx -lSDL2 -lm
+LDFLAGS     = -Wl,-rpath=./lib/MacroLibX -L./lib/MacroLibX -lmlx -lSDL2 -lm -o3 -ofast
 
 DIR_LIB     = lib
 

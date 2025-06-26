@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 16:32:23 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/24 18:25:02 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:55:10 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
+# include <sys/time.h>
 #include <unistd.h>
 #include <math.h>
 
@@ -33,8 +34,8 @@
 
 #define TILE_SIZE 25
 
-#define WIDTH 1000
-#define HEIGHT 1000
+#define WIDTH 1920
+#define HEIGHT 1080
 
 #define PI 3.14159265359
 
@@ -127,19 +128,25 @@ typedef struct s_minimap
 	int valid;
 	char **map;
 	mlx_image wall;
-	mlx_color *w;
 	mlx_image back;
-	mlx_color *b;
 	mlx_image character;
 	mlx_color *c;
 	bool down;
 }			t_minimap;
 
+typedef struct s_crowbar
+{
+	int valid;
+	mlx_color *c;
+	mlx_image bar;
+	bool down;
+}			t_crowbar;
+
 typedef struct s_game
 {
 	void *mlx;
 	void *win;
-	void *img;
+	t_crowbar bar;
 	t_minimap mini;
 	t_player player;
 	t_buffer *lst_buffer;
@@ -157,10 +164,12 @@ void key_press(int keycode, void *params);
 void key_release(int keycode, void *params);
 void move_player(t_player *player, t_game *game);
 void update_move_player(float x, float y, t_game *game);
+long long	current_time(void);
 void update_angle(t_player *player);
 
 void init_player(t_player *player);
 void mouse_up(int button, void *params);
+void	init_crow(t_game *game);
 void mouse_down(int button, void *params);
 
 /* Raycasting functions */
@@ -169,6 +178,7 @@ float get_ray_pos_y(t_game *game, float angle);
 float get_ray_pos_x(t_game *game, float angle);
 float calculate_distance(t_game *game, float ray_x, float ray_y);
 int is_wall_hit(t_game *game, float ray_x, float ray_y);
+int	is_position_blocked(t_game *game, float x, float y);
 
 /* Rendering functions */
 void init_frame_buffer(t_game *game);

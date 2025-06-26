@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 16:43:09 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/24 15:53:33 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:55:07 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 #include "raycasting.h"
 #include <stdio.h>
 #include <fcntl.h>
+# include <sys/time.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <math.h>

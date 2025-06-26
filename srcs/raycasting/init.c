@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/24 17:39:47 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/25 14:04:03 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,39 +21,6 @@ void	init_frame_buffer(t_game *game)
 		cleanup_game(game);
 		exit(1);
 	}
-	game->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
-	if (!game->img)
-	{
-		ft_printf(2, "Error: Failed to create image\n");
-		cleanup_game(game);
-		exit(1);
-	}
-}
-
-int init_all(t_game *game)
-{
-	game->mini.b = malloc(sizeof(mlx_color) * 25 * 25);
-	if (!game->mini.b)
-	{
-		ft_printf(2, "Error failled allocation for background pixel\n");
-		return (0);
-	}
-	game->mini.w = malloc(sizeof(mlx_color) * 25 * 25);
-	if (!game->mini.w)
-	{	
-		free(game->mini.b);
-		ft_printf(2, "Error failled allocation for wall pixel\n");
-		return (0);
-	}
-	game->mini.c = malloc(sizeof(mlx_color) * 25 * 25);
-	if (!game->mini.c)
-	{
-		free(game->mini.b);
-		free(game->mini.w);
-		ft_printf(2, "Error failled allocation for character pixel\n");
-		return (0);
-	}
-	return (1);
 }
 
 void	init_pixel(t_game *game)
@@ -61,8 +28,12 @@ void	init_pixel(t_game *game)
 	int y;
 	int x;
 	
-	if (!init_all(game))
+	game->mini.c = malloc(sizeof(mlx_color) * 25 * 25);
+	if (!game->mini.c)
+	{
+		ft_printf(2, "Error failled allocation for character pixel\n");
 		return ;
+	}
 	y = 0;
 	while (y != 25)
 	{
@@ -70,18 +41,65 @@ void	init_pixel(t_game *game)
 		while (x != 25)
 		{
 			game->mini.c[y * 25 + x] = mlx_get_image_pixel(game->mlx, game->mini.character, x, y);
-			game->mini.b[y * 25 + x] = mlx_get_image_pixel(game->mlx, game->mini.back, x, y);
-			game->mini.w[y * 25 + x] = mlx_get_image_pixel(game->mlx, game->mini.wall, x, y);
 			x++;
 		}
 		y++;
 	}
 }
 
+void	fill_crowbar(t_game *game, char crowbar[50])
+{
+	int y;
+	int x;
+
+	y = 919;
+	x = 271;
+	game->bar.bar = mlx_new_image_from_file(game->mlx, crowbar, &y, &x);
+	if (!game->bar.bar)
+	{
+		ft_printf(2, "Error: failed to load crowbar image\n");
+		return ;
+	}
+	y = 0;
+	while (y < 271)
+	{
+		x = 0;
+		while (x < 919)
+		{
+			game->bar.c[y * 919 + x] = mlx_get_image_pixel(game->mlx, game->bar.bar, x, y);
+			x++;
+		}
+		y++;
+	}
+}
+
+void	init_crow(t_game *game)
+{
+	static char crowbar[50] = "textures/crowbar.png";
+	int fd;
+	
+	fd = open(crowbar, O_RDONLY);
+	game->bar.valid = 1;
+	if (fd == -1)
+	{
+		ft_printf(2, "Textures for crowbar have been modified, starting without crowbar !\n");
+		game->bar.valid = 0;
+	}
+	else
+	{
+		game->bar.c = malloc(sizeof(mlx_color) * 919 * 271);
+		if (!game->bar.c)
+			return ;
+		fill_crowbar(game, crowbar);
+	}		
+	if (fd > 2)
+		close(fd);
+}
+
 void	init_minimap(t_game *game)
 {
-	static char	wall[50] = "minimap_textures/wall.png";
-	static char	background[50] = "minimap_textures/background.png";
+	static char	wall[50] = "minimap_textures/half_wall.png";
+	static char	background[50] = "minimap_textures/half_background.png";
 	static char	character[50] = "minimap_textures/character.png";
 	int			fd[3];
 	static int	w = 25;
@@ -97,6 +115,9 @@ void	init_minimap(t_game *game)
 	}
 	else
 	{
+		close(fd[0]);
+		close(fd[1]);
+		close(fd[2]);
 		ft_array_replace(game->mini.map, "NSWE", '0');
 		game->mini.wall = mlx_new_image_from_file(game->mlx, wall, &w, &w);
 		game->mini.back = mlx_new_image_from_file(game->mlx, background, &w, &w);
@@ -106,6 +127,6 @@ void	init_minimap(t_game *game)
 			ft_printf(2, "Error, could not load minimap texture, starting without minimap\n");
 			game->mini.valid = 0;
 		}
+		init_pixel(game);
 	}
-	init_pixel(game);
 }

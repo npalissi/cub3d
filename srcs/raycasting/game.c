@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 17:10:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/24 15:13:52 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/25 14:04:39 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,15 @@ void	close_win(int event, void *params)
 		mlx_loop_end(game->mlx);
 	}
 }
+void	draw_crow(t_game *game)
+{
+	static mlx_color	tmp[WIDTH * HEIGHT] = {0};
+	// mlx_pixel_put_array(game->mlx, game->win, 0, 0, game->bar.c, 131 * 271);
+	mlx_get_image_region(game->mlx, game->bar.bar, 0, 0, 131, 271, tmp);
+	mlx_pixel_put_region(game->mlx, game->win, 0, 271, 919, 271, game->bar.c);
+	mlx_pixel_put_region(game->mlx, game->win, 0, 0, 131, 271, tmp);
+}
+
 
 void	draw_loop(void *params)
 {
@@ -42,7 +51,8 @@ void	draw_loop(void *params)
 	mlx_clear_window(game->mlx, game->win, (mlx_color){{255, 0, 0, 0}});
 	
 	render_frame(game);
-	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
+	if (game->bar.valid)
+		draw_crow(game);
 	if (game->mini.valid && game->mini.down)
 		draw_minimap(game);
 }

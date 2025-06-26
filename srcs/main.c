@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:04:05 by edubois-          #+#    #+#             */
-/*   Updated: 2025/06/24 16:05:18 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/25 13:01:11 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,13 @@ static void	setup_hooks(t_game *game)
 
 void	cleanup_game(t_game *game)
 {
+	free(game->mini.c);
 	ft_free_tab(game->mini.map);
+	free(game->bar.c);
 	if (game->frame_buffer)
 		free(game->frame_buffer);
-	if (game->img)
-		mlx_destroy_image(game->mlx, game->img);
+	if (game->bar.bar)
+		mlx_destroy_image(game->mlx, game->bar.bar);
 	if (game->texture.north_img)
 		mlx_destroy_image(game->mlx, game->texture.north_img);
 	if (game->texture.south_img)
@@ -95,6 +97,7 @@ int main(int argc, char **argv)
 	
 	init_player(&game.player);
 	init_minimap(&game);
+	init_crow(&game);
 	load_map_data(&game);
 	init_frame_buffer(&game);
 	setup_hooks(&game);

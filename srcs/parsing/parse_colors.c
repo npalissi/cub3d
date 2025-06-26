@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_colors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 12:53:49 by edubois-          #+#    #+#             */
-/*   Updated: 2025/06/23 20:03:35 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/06/25 10:56:54 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,7 @@ mlx_color make_rgb(int *overflow, char **rgb)
 	color.b = hex;
 	color.a = 255;
 	ft_free_tab(rgb);
-	return (color);
-
-	// while(++j < 3 && rgb[j] && !*overflow)
-	// {
-	// 	i = ft_atoi(rgb[j], overflow);
-	// 	if (*overflow)
-	// 		return (0);
-	// 	if (i < 0 || i > 255)
-	// 	{
-	// 		*overflow = 1;
-	// 		return (0);
-	// 	}
-	// 	hex = (hex << 8) + i;
-	// }
-	// return (hex);	
+	return (color);	
 }
 
 mlx_color rgba_to_hex(char *color, int *overflow)
@@ -57,7 +43,7 @@ mlx_color rgba_to_hex(char *color, int *overflow)
 	mlx_color result = {0};
 	
 	rgb = ft_split(color, ',');
-	if (!rgb)
+	if (!rgb || ft_arraylen(rgb) != 3)
 	{
 		*overflow = 1;
 		return (result);
