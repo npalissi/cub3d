@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edubois- <edubois-@student.42angouleme>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/26 17:52:53 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:03:50 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ typedef struct
 	uint32_t y;
 }	vec2;
 
-void	put_region_to_array(mlx_color *fb, vec2 start, vec2 size, mlx_color *src)
+void put_region_to_array(mlx_color *fb, vec2 start, vec2 size, mlx_color *src)
 {
-	for (uint32_t y = start.y; y < size.y + start.y; ++y)
+	for (uint32_t y = 0; y < size.y; ++y)
 	{
-		for (uint32_t x = start.x; x < size.x + start.x; ++x)
+		for (uint32_t x = 0; x < size.x; ++x)
 		{
-			uint32_t	sindex = y * size.x + x;
-			uint32_t	index = (start.y + y) * WIDTH + (start.x + x);
+			uint32_t sindex = y * size.x + x; // source = tmp[y][x]
+			uint32_t index = (start.y + y) * WIDTH + (start.x + x); // dest = fb[y+start.y][x+start.x]
 
 			if (!src[sindex].a)
 				continue;
@@ -67,17 +67,35 @@ void	put_region_to_array(mlx_color *fb, vec2 start, vec2 size, mlx_color *src)
 	}
 }
 
+
 void	draw_crow(t_game *game)
 {
 	static mlx_color	tmp[WIDTH * HEIGHT] = {0};
 
 	// mlx_put_image_to_window(game->mlx, game->win, game->bar.bar, 0, 0);
-
-	mlx_get_image_region(game->mlx, game->bar.bar, 0, 0, 131, 271, tmp);			// cut 1st sprite
-
-	// mlx_pixel_put_region(game->mlx, game->win, 0, 0, 131, 271, tmp);				// display 1st sprite 
-
-	put_region_to_array(game->frame_buffer, (vec2){0, 0}, (vec2){131, 271}, tmp);
+	static int i = 1;
+	static int dir = 1; // 1 = forward, -1 = backward
+	
+	if (current_time() - game->bar.time > 200 && (game->player.key_up ||game->player.key_down|| game->player.key_left || game->player.key_right))
+	{
+		game->bar.time = current_time();
+		i += dir;
+	
+		if (i >= 4)
+		{
+			i = 3;
+			dir = -1;
+		}
+		else if (i <= 1)
+		{
+			i = 1;
+			dir = 1;
+		}
+	}
+	else if (current_time() - game->bar.time > 200)
+		i = 1;
+	mlx_get_image_region(game->mlx, game->bar.bar, 140 * i, 0,  135, 271, tmp);			// cut 1st sprite
+	put_region_to_array(game->frame_buffer, (vec2){WIDTH - 135, HEIGHT - 271}, (vec2){135, 271}, tmp);
 }
 
 void	render_frame(t_game *game)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edubois- <edubois-@student.42angouleme>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 16:32:23 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/26 13:55:10 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:52:22 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@
 
 #define TILE_SIZE 25
 
-#define WIDTH 1920
-#define HEIGHT 1080
+#define WIDTH 1000
+#define HEIGHT 1000
 
 #define PI 3.14159265359
 
@@ -139,6 +139,7 @@ typedef struct s_crowbar
 	int valid;
 	mlx_color *c;
 	mlx_image bar;
+	unsigned long long time;
 	bool down;
 }			t_crowbar;
 

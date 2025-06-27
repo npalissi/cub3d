@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edubois- <edubois-@student.42angouleme>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/26 17:29:13 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/27 14:27:20 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	fill_crowbar(t_game *game, char crowbar[50])
 	int y;
 	int x;
 
-	y = 919;
+	y = 651;
 	x = 271;
 	game->bar.bar = mlx_new_image_from_file(game->mlx, crowbar, &y, &x);
 	if (!game->bar.bar)
@@ -63,15 +63,16 @@ void	fill_crowbar(t_game *game, char crowbar[50])
 	while (y < 271)
 	{
 		x = 0;
-		while (x < 919)
+		while (x < 651)
 		{
-			mlx_color	*pixel = &game->bar.c[y * 919 + x];
+			mlx_color	*pixel = &game->bar.c[y * 651 + x];
 			
 			*pixel = mlx_get_image_pixel(game->mlx, game->bar.bar, x, y);
 			x++;
 		}
 		y++;
 	}
+	game->bar.time = current_time();
 }
 
 void	init_crow(t_game *game)
@@ -88,7 +89,7 @@ void	init_crow(t_game *game)
 	}
 	else
 	{
-		game->bar.c = malloc(sizeof(mlx_color) * 919 * 271);
+		game->bar.c = malloc(sizeof(mlx_color) * 651 * 271);
 		if (!game->bar.c)
 			return ;
 		fill_crowbar(game, crowbar);
