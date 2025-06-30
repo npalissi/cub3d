@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 23:52:45 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/24 15:19:46 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/30 13:42:53 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,28 @@ void	key_release(int keycode, void *params)
 		game->player.left_rotate = false;
 	if (keycode == RIGHT)
 		game->player.right_rotate = false;
+}
+
+void	mouse_wheel(int keycode, void *params)
+{
+	static int first;
+	static int scroll_count;
+	t_game	*game;
+
+	(void)keycode;
+	game = params;
+	scroll_count++;
+	if (scroll_count > 8)
+	{
+		if (!first)
+			game->bar.wheel = true;
+		first++;
+		if (game->bar.wheel)
+			game->bar.wheel = false;
+		else
+			game->bar.wheel = true;
+		scroll_count = 0;
+	}
 }
 
 void	mouse_up(int button, void *params)

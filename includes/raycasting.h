@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42angouleme>    +#+  +:+       +#+        */
+/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 16:32:23 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/27 15:52:22 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/30 16:03:50 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@
 
 #define TILE_SIZE 25
 
-#define WIDTH 1000
-#define HEIGHT 1000
+#define WIDTH 1920
+#define HEIGHT 1080
 
 #define PI 3.14159265359
 
@@ -136,12 +136,17 @@ typedef struct s_minimap
 
 typedef struct s_crowbar
 {
-	int valid;
-	mlx_color *c;
-	mlx_image bar;
-	unsigned long long time;
-	bool down;
-}			t_crowbar;
+	int					valid[4];
+	int					x[4];
+	int					y[4];
+	int 				type;
+	mlx_color			*c[4];
+	uint64_t			size[4];
+	mlx_image			item[4];
+	unsigned long long	time[2];
+	unsigned long long	wait[2];
+	bool 				wheel;
+}	t_crowbar;
 
 typedef struct s_game
 {
@@ -164,13 +169,14 @@ void pos_mouse(t_game *game);
 void key_press(int keycode, void *params);
 void key_release(int keycode, void *params);
 void move_player(t_player *player, t_game *game);
+void	mouse_wheel(int keycode, void *params);
 void update_move_player(float x, float y, t_game *game);
 long long	current_time(void);
 void update_angle(t_player *player);
 
 void init_player(t_player *player);
 void mouse_up(int button, void *params);
-void	init_crow(t_game *game);
+void	init_item(t_game *game, char path[50], int type);
 void mouse_down(int button, void *params);
 
 /* Raycasting functions */

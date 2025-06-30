@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 16:43:09 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/26 13:55:07 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:01:12 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <math.h>
+#include <sys/mman.h>
 
 #include "../lib/libft/libft.h"
 #include "../lib/printf_fd/ft_printf.h"

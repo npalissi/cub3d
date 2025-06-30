@@ -54,7 +54,7 @@ SRCS := array/ft_arraydupe.c\
 		destructor_handler/ft_deshandler.c
 
 CC := cc
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -g
 OBJS := $(SRCS:.c=.o)
 
 NAME := libft.a

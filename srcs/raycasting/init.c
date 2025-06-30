@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42angouleme>    +#+  +:+       +#+        */
+/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/27 14:27:20 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/30 16:06:47 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,57 +46,87 @@ void	init_pixel(t_game *game)
 		y++;
 	}
 }
-void	fill_crowbar(t_game *game, char crowbar[50])
+void	fill_item(t_game *game, char path[50], int type)
 {
 	int y;
 	int x;
 
-	y = 651;
-	x = 271;
-	game->bar.bar = mlx_new_image_from_file(game->mlx, crowbar, &y, &x);
-	if (!game->bar.bar)
+	game->bar.item[type] = mlx_new_image_from_file(game->mlx, path, &y, &x);
+	if (!game->bar.item[type])
 	{
-		ft_printf(2, "Error: failed to load crowbar image\n");
+		if (!type)
+			ft_printf(2, "Error: failed to load crowbar image\n");
+			else
+			ft_printf(2, "Error: failed to load kunai image\n");
+		game->bar.valid[type] = 0;
 		return ;
 	}
-	y = 0;
-	while (y < 271)
+	while (x < game->bar.x[type])
 	{
-		x = 0;
-		while (x < 651)
+		y = 0;
+		while (y < game->bar.x[type])
 		{
-			mlx_color	*pixel = &game->bar.c[y * 651 + x];
-			
-			*pixel = mlx_get_image_pixel(game->mlx, game->bar.bar, x, y);
-			x++;
+			mlx_color	*pixel = &game->bar.c[game->bar.type][x * game->bar.y[type] + y];
+			if (!type)
+				*pixel = mlx_get_image_pixel(game->mlx, game->bar.item[type], y, x);
+			y++;
 		}
-		y++;
+		x++;
 	}
-	game->bar.time = current_time();
+	game->bar.time[type] = current_time();
 }
 
-void	init_crow(t_game *game)
+void	init_item(t_game *game, char path[50], int type)
 {
-	static char crowbar[50] = "textures/crowbar.png";
 	int fd;
-	
-	fd = open(crowbar, O_RDONLY);
-	game->bar.valid = 1;
+	uint64_t	size;
+
+	fd = open(path, O_RDONLY);
+	game->bar.valid[type] = 1;
 	if (fd == -1)
 	{
-		ft_printf(2, "Textures for crowbar have been modified, starting without crowbar !\n");
-		game->bar.valid = 0;
+		if (!type)
+			ft_printf(2, "Textures for crowbar have been modified, starting without crowbar !\n");
+		else
+			ft_printf(2, "Textures for kunai have been modified, starting without kunai !\n");
+		game->bar.valid[type] = 0;
+		return ;
 	}
 	else
 	{
-		game->bar.c = malloc(sizeof(mlx_color) * 651 * 271);
-		if (!game->bar.c)
+		game->bar.x[0] = 651;
+		game->bar.x[1] = 134400;
+		game->bar.x[2] = 46080;
+		game->bar.x[3] = 46080;
+		game->bar.y[0] = 271;
+		game->bar.y[1] = 1080;
+		game->bar.y[2] = 1080;
+		game->bar.y[3] = 1080;
+		if ((!type && (HEIGHT < 271 || WIDTH < 140)) || (type && (HEIGHT < 1080 || WIDTH < 1920)))
+		{
+			ft_printf(2, "Error, windows is to tight to put item, starting without ");
+			if (!type)
+				ft_printf(2, "crowbar\n");
+			else
+				ft_printf(2, "kunai\n");
+			game->bar.valid[type] = 0;
 			return ;
-		fill_crowbar(game, crowbar);
+		}
+		size = game->bar.x[type] * game->bar.y[type] * (sizeof(mlx_color));
+		game->bar.size[type] = size;
+		game->bar.c[type] = (mlx_color *) mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
+		if (game->bar.c[type] == MAP_FAILED)
+			return ;
+		fill_item(game, path, type);
 	}		
 	if (fd > 2)
 		close(fd);
+	game->bar.wait[type] = 30;
+		if (!type)
+		game->bar.wait[type] = 200;
+	game->bar.type = type;
 }
+
 
 void	init_minimap(t_game *game)
 {
@@ -105,7 +135,7 @@ void	init_minimap(t_game *game)
 	static char	character[50] = "minimap_textures/character.png";
 	int			fd[3];
 	static int	w = 25;
-
+	
 	game->mini.valid = 1;
 	fd[0] = open(wall, O_RDONLY);
 	fd[1] = open(background, O_RDONLY);

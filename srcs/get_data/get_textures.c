@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 13:53:41 by edubois-          #+#    #+#             */
-/*   Updated: 2025/06/09 14:27:04 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/28 16:06:57 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,6 @@ int get_textures(t_game *game)
             return (0);
         }
     }
+        game->map.map = save_map;
     return (check_texture(game));
 }

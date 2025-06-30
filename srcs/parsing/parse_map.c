@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 10:15:04 by edubois-          #+#    #+#             */
-/*   Updated: 2025/06/24 15:54:39 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/28 16:04:05 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ int	cut_map(t_game *game)
         stat[3] += ft_charite(game->map.map[i], 'W');
         i++;
     }
-    if ((stat[0] + stat[1] + stat[2] + stat[3]) > 1)
+    if ((stat[0] + stat[1] + stat[2] + stat[3]) != 1)
     {
         ft_printf(2, "Error, player spawnpoint must be declared only"
 			" once and not %d times!\n", stat[0] + stat[1] + stat[2] + stat[3]);

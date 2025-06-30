@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 16:00:52 by edubois-          #+#    #+#             */
-/*   Updated: 2025/06/24 16:04:25 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/06/30 12:44:46 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void    ft_array_replace(char **array, char *items, char c)
     static int y = 0;
     int x;
 
+    if (!array)
+        return ;
     while (array[y])
     {
         x = 0;
