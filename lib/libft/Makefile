@@ -3,6 +3,7 @@ SRCS := array/ft_arraydupe.c\
 		array/ft_free_tab.c\
 		array/ft_split.c\
 		array/ft_array_replace.c\
+		array/ft_arrayoccu.c\
 		char/ft_isalnum.c\
 		char/ft_isalpha.c\
 		char/ft_isascii.c\
@@ -10,6 +11,7 @@ SRCS := array/ft_arraydupe.c\
 		char/ft_isprint.c\
 		char/ft_charite.c\
 		char/ft_issign.c\
+		char/ft_abs.c\
 		char/ft_iswhitespace.c\
 		lst/ft_lstadd_back_bonus.c\
 		lst/ft_lstadd_front_bonus.c\

@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 10:15:04 by edubois-          #+#    #+#             */
-/*   Updated: 2025/06/28 16:04:05 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/01 11:34:21 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void fill_map(char **map, int i)
 int is_in_bounds(char **map, int x, int y, int height)
 {
 	int row_len;
-
+	
     if (y < 0 || y >= height)
         return 0;
     if (!map[y])
@@ -61,9 +61,10 @@ int flood_fill(char **map, int x, int y, int height)
 	
 	if (!is_in_bounds(map, x, y, height))
         return 0;
-    if (map[y][x] != EMPTY && map[y][x] != 'N' && map[y][x] != 'S'
-        && map[y][x] != 'E' && map[y][x] != 'W')
-        return 1;
+	if (map[y][x] != EMPTY && map[y][x] != 'N' && map[y][x] != 'S'
+	    && map[y][x] != 'E' && map[y][x] != 'W' && map[y][x] != 'D')
+	    return 1;
+	
     map[y][x] = VISITED;
 	right = flood_fill(map, x + 1, y, height);
 	left = flood_fill(map, x - 1, y, height);
@@ -116,6 +117,24 @@ void check_map(char *map, int *error)
 	}
 }
 
+void	get_door(t_game *game, int y)
+{
+	static int idx;
+	int x;
+	
+	x = 0;
+	while (game->map.map[y][x])
+	{
+		if (game->map.map[y][x] == 'D')
+		{
+			game->map.map[y][x] = '1';
+			game->d[idx].x = x;
+			game->d[idx++].y = y;
+		}
+		x++;
+	}
+}
+
 int	cut_map(t_game *game)
 {
     static int stat[4] = {0, 0, 0, 0};
@@ -127,8 +146,13 @@ int	cut_map(t_game *game)
 		&& !(first_char(*game->map.map, '0'))))
 		game->map.map++;
 	i = 0;
+	game->d = ft_calloc(sizeof(t_door) , (ft_arrayoccu(game->map.map + i, 'D') + 1));
+	game->d->pressed = false;
+	if (!game->d)
+		return (error);
     while (game->map.map[i])
     {
+		get_door(game, i);
 		check_map(game->map.map[i], &error);
         stat[0] += ft_charite(game->map.map[i], 'N');
         stat[1] += ft_charite(game->map.map[i], 'S');

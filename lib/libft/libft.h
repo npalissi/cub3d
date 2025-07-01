@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 16:58:32 by edubois-          #+#    #+#             */
-/*   Updated: 2025/06/24 16:03:51 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/01 11:39:49 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int		ft_isprint(int c);
 int		ft_isascii(int c);
 int		ft_tolower(int letter);
 void    ft_array_replace(char **array, char *items, char c);
+int		ft_arrayoccu(char **tab, int c);
 int		ft_toupper(int letter);
 void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_strdup(const char *s);
@@ -65,6 +66,7 @@ char	*ft_strtrim(char const *s1, char const *set);
 void    ft_print_array(char **str);
 char	**ft_split(char const *s, char c);
 char	*ft_itoa(int n);
+int ft_abs(int a);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 int	ft_charite(char *str, char c);

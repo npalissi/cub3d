@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/25 10:33:12 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/01 11:24:58 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int get_max_map_width(char **map) {
 
 void put_item(t_game *game, char item) {
     int x, y;
-    
+    bool wall_seen;
     int map_height = ft_arraylen(game->mini.map);
     int map_width = get_max_map_width(game->mini.map);
     
@@ -37,23 +37,28 @@ void put_item(t_game *game, char item) {
     int offset_x = (WIDTH - minimap_width) / 2;
     int offset_y = (HEIGHT - minimap_height) / 2;
     
+    
     for (y = 0; y < map_height; y++)
     {
         int row_len = ft_strlen(game->mini.map[y]);
+        wall_seen = false;
         for (x = 0; x < row_len; x++)
         {
-            if (item == game->mini.map[y][x] && item == '0')
+            if (game->mini.map[y][x] == '1')
+                wall_seen = true;
+            if (item == game->mini.map[y][x] && (item == '0' || ((item == ' ') && wall_seen)))
                 mlx_put_image_to_window(game->mlx, game->win, game->mini.back, offset_x + x * TILE_SIZE, offset_y + y * TILE_SIZE);
-            if (item == game->mini.map[y][x] && item == '1')
+            if (item == game->mini.map[y][x] && (item == '1' || item == 'D'))
                 mlx_put_image_to_window(game->mlx, game->win, game->mini.wall, offset_x + x * TILE_SIZE, offset_y + y * TILE_SIZE);
         }
     }
 }
 
 void draw_minimap(t_game *game) {
-    
     put_item(game, '0');
+    put_item(game, ' ');
     put_item(game, '1');
+    put_item(game, 'D');
     int map_height = ft_arraylen(game->mini.map);
     int map_width = get_max_map_width(game->mini.map);
     

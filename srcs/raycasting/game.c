@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 17:10:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/30 11:10:38 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/01 13:09:06 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,26 @@ void	close_win(int event, void *params)
 		mlx_loop_end(game->mlx);
 	}
 }
+void	manage_door(t_game *game)
+{
+	int i;
 
+	i = 0;
+	while (game->d[i].x)
+	{
+		if (game->d[i].pressed && game->bar.wheel)
+		{
+			game->map.map[game->d[i].y][game->d[i].x] = '0';
+			game->mini.map[game->d[i].y][game->d[i].x] = '0';
+		}
+		else if (!game->d[i].pressed)
+		{
+			game->map.map[game->d[i].y][game->d[i].x] = '1';
+			game->mini.map[game->d[i].y][game->d[i].x] = '1';
+		}
+		i++;
+	}
+}
 
 
 void	draw_loop(void *params)
@@ -43,7 +62,7 @@ void	draw_loop(void *params)
 	// Effacer la fenêtre avant de redessiner
 	mlx_clear_window(game->mlx, game->win, (mlx_color){{255, 0, 0, 0}});
 	
-
+	manage_door(game);
 	render_frame(game);
 	if (game->mini.valid && game->mini.down)
 		draw_minimap(game);

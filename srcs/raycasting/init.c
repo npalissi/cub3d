@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/30 16:06:47 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/01 09:57:19 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	fill_item(t_game *game, char path[50], int type)
 		if (!type)
 			ft_printf(2, "Error: failed to load crowbar image\n");
 			else
-			ft_printf(2, "Error: failed to load kunai image\n");
+			ft_printf(2, "Error: failed to load kunai image %d\n", type);
 		game->bar.valid[type] = 0;
 		return ;
 	}
@@ -88,7 +88,7 @@ void	init_item(t_game *game, char path[50], int type)
 		if (!type)
 			ft_printf(2, "Textures for crowbar have been modified, starting without crowbar !\n");
 		else
-			ft_printf(2, "Textures for kunai have been modified, starting without kunai !\n");
+			ft_printf(2, "Textures for kunai have been modified, starting without kunai %d!\n", type);
 		game->bar.valid[type] = 0;
 		return ;
 	}
@@ -108,7 +108,7 @@ void	init_item(t_game *game, char path[50], int type)
 			if (!type)
 				ft_printf(2, "crowbar\n");
 			else
-				ft_printf(2, "kunai\n");
+				ft_printf(2, "kunai %d\n", type);
 			game->bar.valid[type] = 0;
 			return ;
 		}

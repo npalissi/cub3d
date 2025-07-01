@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 16:32:23 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/30 16:03:50 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/01 13:27:44 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #define A 4
 #define S 22
 #define D 7
+#define F 9
 #define ESC 41
 #define TAB 43
 #define BLOCK_SIZE 64
@@ -34,8 +35,8 @@
 
 #define TILE_SIZE 25
 
-#define WIDTH 1920
-#define HEIGHT 1080
+#define WIDTH 1000
+#define HEIGHT 1000
 
 #define PI 3.14159265359
 
@@ -57,6 +58,13 @@ typedef struct s_player
 	bool key_left;
 	bool key_right;
 }				t_player;
+
+typedef struct s_door {
+	int x;
+	int y;
+	bool pressed;
+}	t_door;
+
 
 typedef struct s_ray
 {
@@ -155,12 +163,14 @@ typedef struct s_game
 	t_crowbar bar;
 	t_minimap mini;
 	t_player player;
+	bool can_toggle_door;
 	t_buffer *lst_buffer;
 	t_color	color;
 	t_texture	texture;
 	t_mouse mouse;
 	t_map map;
 	mlx_color *frame_buffer;
+	t_door *d;
 	int zone_cx; // centre de la zone actuelle (x en blocs)
     int zone_cy;
 }			t_game;

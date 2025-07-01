@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 23:52:45 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/30 13:42:53 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/01 13:29:51 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,51 @@ void	init_player(t_player *player)
 	player->right_rotate = false;
 }
 
+int nearest_door(t_game *game)
+{
+    int i = 0;
+    int nearest_index = -1;
+    int min_dist = 999999; // valeur très grande
+
+    int px = (int)(game->player.x / BLOCK_SIZE);
+    int py = (int)(game->player.y / BLOCK_SIZE);
+
+    while (game->d[i].x)
+    {
+        int dx = ft_abs(game->d[i].x - px);
+        int dy = ft_abs(game->d[i].y - py);
+        int dist = dx + dy;
+
+        if (dist <= 2 && dist < min_dist)
+        {
+            min_dist = dist;
+            nearest_index = i;
+        }
+        i++;
+    }
+	if (nearest_index == -1)
+		ft_printf(2, "You need to be near a door to open it !\n");
+	if (!game->bar.wheel && nearest_index != -1)
+		ft_printf(2, "Take crowbar to open/close door !\n");
+	if (!game->bar.wheel)
+		nearest_index = -1;
+    return nearest_index; // -1 si aucune porte dans la portée
+}
+
+
+
 void	key_press(int keycode, void *params)
 {
 	t_game	*game;
+	int		index;
 
 	game = params;
+	if (keycode == F)
+	{
+		index = nearest_door(game);
+		if (index != -1)
+			game->d[index].pressed = !game->d[index].pressed;
+	}
 	if (keycode == TAB)
 		game->mini.down = true;
 	if (keycode == W)
@@ -47,6 +87,7 @@ void	key_press(int keycode, void *params)
 	if (keycode == ESC)
 		mlx_loop_end(game->mlx);
 }
+
 
 void	key_release(int keycode, void *params)
 {

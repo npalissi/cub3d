@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/25 11:05:14 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/01 10:27:09 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ static mlx_color	get_texture_color(t_game *game, t_ray ray, int tex_y)
 	mlx_color color;
 	
 	// Choisir la bonne texture selon l'orientation du mur
-	if (ray.wall_side == 0)  // Nord
+	if (ray.wall_side == 1)  // Nord
 		texture = game->texture.north_img;
-	else if (ray.wall_side == 1)  // Sud
+	else if (ray.wall_side == 0)  // Sud
 		texture = game->texture.south_img;
 	else if (ray.wall_side == 2)  // Ouest
-		texture = game->texture.west_img;
-	else  // Est
 		texture = game->texture.east_img;
+	else  // Est
+		texture = game->texture.west_img;
 	
 	// Vérifier si la texture est valide
 	if (!texture)
