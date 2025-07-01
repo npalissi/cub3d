@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:04:05 by edubois-          #+#    #+#             */
-/*   Updated: 2025/06/30 16:12:08 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/01 15:01:45 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,17 @@ static void	setup_hooks(t_game *game)
 
 void	cleanup_game(t_game *game)
 {
-	free(game->mini.c);
+
+	if (game->mini.c)
+		dh_free(game->mini.c);
+	if (game->d)
+		dh_free(game->d);
+	if (game->color.cl)
+		dh_free(game->color.cl);
+	if (game->color.cl)
+		dh_free(game->color.cl);
 	ft_free_tab(game->mini.map);
+	ft_free_tab(game->map.full_map);
 	if (game->bar.item[0] != (void *)-1)
 		munmap(game->bar.item[0], game->bar.size[0]);
 	if (game->bar.item[1] != (void *)-1)
@@ -90,6 +99,35 @@ void	cleanup_game(t_game *game)
 		mlx_destroy_context(game->mlx);
 }
 
+int check_full_map(t_game *game)
+{
+	char *str;
+	int empty[2];
+	int i;
+	
+	empty[1] = 0;
+	while (*game->map.full_map)
+	{
+		empty[0] = 1;
+		str = *game->map.full_map++;
+		i = 0;
+		while (str[i] && ft_iswhitespace(str[i]))
+			i++;
+		if (str[i])			
+			empty[0] = 0;
+		if (!empty[0])
+		{
+			if (ft_strstr(str, game->color.cl) || ft_strstr(str, game->color.fl) || ft_strstr(str, game->texture.east) || ft_strstr(str, game->texture.west) || ft_strstr(str, game->texture.south) || ft_strstr(str, game->texture.north))
+				continue;
+			if ((ft_strlen(str) == ft_strlen(game->map.map[0]) - 1) && first_char(str, '1'))
+				break ;
+			else
+				empty[1] += ft_printf(2, "Error, files must be clean, " RED"%s\n"RESET, str);
+			}
+		}
+	return (empty[1]);
+}
+
 int main(int argc, char **argv)
 {
 	t_game game = {0};
@@ -105,9 +143,11 @@ int main(int argc, char **argv)
 	
 	if (!init_mlx(&game))
 		return (1);
-	if (!load_textures(&game))
+	if (!load_textures(&game) || check_full_map(&game))
+	{
+		cleanup_game(&game);
 		return (1);
-	
+	}
 	init_item(&game, "textures/wraith_exit.png", 1);
 	init_item(&game, "textures/wraith_walking.png", 2);
 	init_item(&game, "textures/wraith_transition.png", 3);

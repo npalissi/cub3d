@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_colors.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
+/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 12:14:18 by edubois-          #+#    #+#             */
-/*   Updated: 2025/06/23 20:03:31 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/01 13:59:18 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,22 @@
 int    fill_color(t_game *game, int i)
 {
     int overflow;
+    int size;
 
+    size = ft_strlen(*game->map.map);
     overflow = 0;
     if (i == 1)
+    {
         game->color.floor = rgba_to_hex(ft_substr(*game->map.map, 2,
-            ft_strlen(*game->map.map) - 3), &overflow);
+            size - 3), &overflow);
+        game->color.fl = ft_substr(*game->map.map, 0, size);
+    }
     else
+    {
         game->color.ceiling = rgba_to_hex(ft_substr(*game->map.map, 2,
-            ft_strlen(*game->map.map) - 3), &overflow);
+            size - 3), &overflow);
+        game->color.cl = ft_substr(*game->map.map, 0, size);
+    }
     if (overflow == 1)
         ft_printf(2, "Error, color have to be between 0 and 255 for rgb !\n");
     if (ft_charite(*game->map.map, ',') != 2 || overflow == 2)

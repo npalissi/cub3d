@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:58:51 by edubois-          #+#    #+#             */
-/*   Updated: 2025/06/24 15:53:39 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/01 14:43:40 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int get_map(char *file, t_game *game)
     
     fill_map_line(&map.map, fd);
     close(fd);
+    map.full_map = ft_arraydupe(map.map);
     if (!parse_occu(map.map) || !parse_map(map.map, game))
         return (0);
     game->map = map;

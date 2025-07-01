@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 16:32:23 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/01 13:27:44 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/01 14:32:18 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_ray
 typedef struct s_map
 {
 	char **map;
+	char **full_map;
 	char *str;
 	int w;
 	int h;
@@ -96,7 +97,9 @@ typedef struct	s_buffer
 typedef struct s_color
 {
 	mlx_color floor;
+	char  *fl;
 	mlx_color ceiling;
+	char 	*cl;
 }				t_color;
 
 typedef struct s_texture
