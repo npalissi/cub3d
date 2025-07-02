@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycasting.h                                       :+:      :+:    :+:   */
+/*   raycasting_bonus.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 16:32:23 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/02 22:11:09 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/02 21:56:18 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RAYCASTING_H
-# define RAYCASTING_H
+#ifndef RAYCASTING_BONUS_H
+# define RAYCASTING_BONUS_H
 
-#include "cub3d.h"
+#include "cub3d_bonus.h"
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -83,6 +83,12 @@ typedef struct s_player
 	bool key_right;
 }				t_player;
 
+typedef struct s_door {
+	int x;
+	int y;
+	bool pressed;
+}	t_door;
+
 
 typedef struct s_ray
 {
@@ -127,18 +133,36 @@ typedef struct s_texture
 	char *south;
 	char *west;
 	char *east;
+	char *door;          // Nouveau: texture pour les portes
 	mlx_image north_img;
 	mlx_image south_img;
 	mlx_image west_img;
 	mlx_image east_img;
+	mlx_image door_img;  // Nouveau: image pour les portes
 	int width;
 	int height;
 }			t_texture;
 
+typedef struct s_mouse
+{
+	int x;
+	int y;
+	int is_press;
+}			t_mouse;
+
+
+// Minimap structure
 
 typedef struct s_minimap
 {
 	int		skipped;
+	int valid;
+	char **map;
+	mlx_image wall;
+	mlx_image back;
+	mlx_image character;
+	mlx_color *c;
+	bool down;
 }			t_minimap;
 
 typedef struct s_crowbar
@@ -168,17 +192,27 @@ typedef struct s_game
 {
 	void *mlx;
 	void *win;
+	t_crowbar bar;
 	t_minimap mini;
 	t_player player;
 	bool can_toggle_door;
 	t_buffer *lst_buffer;
 	t_color	color;
 	t_texture	texture;
+	t_mouse mouse;
 	t_map map;
 	mlx_color *frame_buffer;
+	t_door *d;
 	int zone_cx; // centre de la zone actuelle (x en blocs)
     int zone_cy;
+	t_fps fps_data;
 }			t_game;
+
+typedef struct s_vec2
+{
+	uint32_t x;
+	uint32_t y;
+}	vec2;
 
 void pos_mouse(t_game *game);
 void key_press(int keycode, void *params);

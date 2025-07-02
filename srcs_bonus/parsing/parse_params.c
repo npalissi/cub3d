@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_utils.c                                     :+:      :+:    :+:   */
+/*   parse_params.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/02 21:56:32 by npalissi         ###   ########.fr       */
+/*   Created: 2025/06/18 12:17:04 by edubois-          #+#    #+#             */
+/*   Updated: 2025/07/02 22:06:57 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/raycasting.h"
+#include "../../includes/cub3d_bonus.h"
 
-// Fonctions de sprite rendering pour ttranche
+int    parse_occu(char **map)
+{
+    static char *key_mapping[6] = {"NO", "SO", "EA", "WE", "F", "C", "DO"};
+    int i;
+    int error;
 
-
-	put_region_to_array(game->frame_buffer, (vec2){0, 0}, (vec2){1920, 1080}, tmp);
+    i = 0;
+    error = 1;
+    while(i < 7)
+    {
+        if (count_occurrences(key_mapping[i], map) != 1)
+            error = 0;
+        i++;
+    }
+    return (error);
 }
-
-
-// render_frame() moved to render.c
-

@@ -6,11 +6,11 @@
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/06/23 19:56:29 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/02 22:06:18 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/raycasting.h"
+#include "../../includes/raycasting_bonus.h"
 
 mlx_color	calculate_wall_color(mlx_color base_color)
 {

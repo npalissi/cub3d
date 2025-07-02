@@ -6,15 +6,18 @@
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/02 22:12:03 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/02 22:06:18 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/raycasting.h"
+#include "../../includes/raycasting_bonus.h"
 
 // Fonction pour obtenir la texture appropriée selon le côté du mur
 static mlx_image	*get_wall_texture(t_game *game, t_ray ray)
 {
+	if (ray.is_door && game->texture.door_img)
+		return (&game->texture.door_img);
+	
 	if (ray.wall_side == 0)
 		return (&game->texture.north_img);
 	else if (ray.wall_side == 1)

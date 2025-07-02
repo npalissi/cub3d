@@ -1,16 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycasting.c                                       :+:      :+:    :+:   */
+/*   raycasting_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 19:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/02 22:14:02 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/02 19:53:23 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/raycasting.h"
+#include "../../includes/raycasting_bonus.h"
+#include <math.h>
+
+// Structures adaptées de ttranche
+typedef struct s_vecd {
+	double x;
+	double y;
+} t_vecd;
+
+typedef struct s_ray_tt {
+	t_vecd st_cos;  // Step vector for cos intersections
+	t_vecd st_sin;  // Step vector for sin intersections  
+	double ln_cos;  // Length of cos ray
+	double ln_sin;  // Length of sin ray
+} t_ray_tt;
+
+typedef struct s_trace_tt {
+	t_ray_tt ray;
+	t_ray_tt step;
+	t_vecd ref;     // Reference position (player)
+	float cos_a;    // cos(angle)
+	float sin_a;    // sin(angle)
+	float newa;     // Normalized angle for fisheye correction
+	double len;     // Final ray length
+	int map_x;      // Map position X
+	int map_y;      // Map position Y
+	int wall_side;  // 0=N, 1=S, 2=W, 3=E
+	float tex_offset; // Texture offset [0-1]
+} t_trace_tt;
 
 // Fonctions utilitaires
 static double calc_sqrtlen(t_vecd v)
@@ -103,6 +131,23 @@ static int check_wall_tt(t_game *game, int x, int y)
 }
 
 // Fonction pour vérifier si une position correspond à une porte
+int is_door_at_position(t_game *game, int map_x, int map_y)
+{
+	int i;
+
+	if (!game->d)
+		return (0);
+	
+	i = 0;
+	while (game->d[i].x)
+	{
+		if (game->d[i].x == map_x && game->d[i].y == map_y)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 // Version corrigée avec angle relatif pré-calculé
 t_ray cast_ray_corrected(t_game *game, float angle, float relative_angle)
 {
@@ -126,7 +171,7 @@ t_ray cast_ray_corrected(t_game *game, float angle, float relative_angle)
 	max_steps = (game->map.w > game->map.h) ? game->map.w : game->map.h;
 	max_steps = max_steps * 2 + 10;
 	
-	// Raycasting loop
+	// raycasting_bonus loop
 	i = 0;
 	while (i < max_steps)
 	{
@@ -164,11 +209,12 @@ t_ray cast_ray_corrected(t_game *game, float angle, float relative_angle)
 	result.cos_angle = tr.cos_a;
 	result.sin_angle = tr.sin_a;
 	result.is_vertical = (tr.wall_side == 2 || tr.wall_side == 3) ? 0 : 1;
+	result.is_door = is_door_at_position(game, tr.map_x, tr.map_y);
 	
 	return result;
 }
 
-// Fonction principale de raycasting
+// Fonction principale de raycasting_bonus
 t_ray cast_ray(t_game *game, float angle)
 {
 	float relative_angle = angle - game->player.angle;
@@ -207,5 +253,37 @@ void render_frame_ttranche(t_game *game)
 		// Dessiner la colonne
 		draw_vertical_line_no_stretch(game, x, wall_height, ray);
 	}
+	
+	// Rendu des sprites (copié du système existant)
+	static bool has_exit = false;
+	static bool has_trans = false;
+	bool is_moving = game->player.key_up || game->player.key_down || 
+					 game->player.key_left || game->player.key_right;
+	
+	if (game->bar.valid[1] && game->bar.valid[2] && game->bar.valid[3] && !game->bar.wheel)
+	{
+		if (is_moving && !has_exit)
+			draw_exit_kunai(game, &has_exit);
+		
+		if (has_exit)
+		{
+			if (!has_trans)
+				draw_transition(game, &has_trans);
+			else
+				draw_sprinting_kunai(game, is_moving);
+		}
+		
+		if (!is_moving)
+		{
+			has_exit = false;
+			has_trans = false;
+		}
+	}
+	else if (game->bar.valid[0] && game->bar.wheel)
+	{
+		draw_crow(game);
+	}
+	
+	// Transférer à l'écran
 	mlx_pixel_put_region(game->mlx, game->win, 0, 0, WIDTH, HEIGHT, game->frame_buffer);
 }

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   fps.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npalissi <npalissi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:30:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/02 16:30:00 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/02 22:06:18 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/raycasting.h"
+#include "../../includes/raycasting_bonus.h"
 
 void init_fps(t_game *game)
 {

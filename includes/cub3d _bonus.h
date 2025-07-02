@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   cub3d _bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 16:43:09 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/02 21:03:40 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/02 21:38:55 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-#define CUB3D_H
+#ifndef CUB3D_BONUS_H
+#define CUB3D_BONUS_H
 
 #define WALL '1'
 #define EMPTY '0'
@@ -42,7 +42,7 @@
 #define BWHITE      "\033[1;37m"
 
 #include "../MacroLibX/includes/mlx.h"
-#include "raycasting.h"
+#include "raycasting_bonus.h"
 #include <stdio.h>
 #include <fcntl.h>
 # include <sys/time.h>

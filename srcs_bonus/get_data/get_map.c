@@ -6,11 +6,11 @@
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:58:51 by edubois-          #+#    #+#             */
-/*   Updated: 2025/07/02 22:23:25 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/02 22:06:57 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../../includes/cub3d_bonus.h"
 
 void    fill_map_line(char ***map, int fd)
 {
