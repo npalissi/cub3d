@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 23:52:45 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/01 13:29:51 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/02 14:45:47 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,10 @@ void	key_press(int keycode, void *params)
 	if (keycode == F)
 	{
 		index = nearest_door(game);
-		if (index != -1)
+		if (index != -1 && (((int)game->player.x / BLOCK_SIZE != game->d[index].x) || ((int)game->player.y / BLOCK_SIZE != game->d[index].y)))
 			game->d[index].pressed = !game->d[index].pressed;
+		else if (index != -1)
+			printf("You must be out of the way to close a door !\n");
 	}
 	if (keycode == TAB)
 		game->mini.down = true;

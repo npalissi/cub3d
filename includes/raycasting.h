@@ -6,7 +6,7 @@
 /*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 16:32:23 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/01 14:32:18 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/02 14:01:28 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@
 
 #define TILE_SIZE 25
 
-#define WIDTH 1000
-#define HEIGHT 1000
+#define WIDTH 1000 
+#define HEIGHT 1000 
 
 #define PI 3.14159265359
 
