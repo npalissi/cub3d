@@ -147,5 +147,20 @@ int	load_textures(t_game *game)
 		return (0);
 	}
 	
+	// Chargement de la texture de porte seulement si elle existe
+	if (game->texture.door)
+	{
+		game->texture.door_img = mlx_new_image_from_file(game->mlx, game->texture.door, &width, &height);
+		if (!game->texture.door_img)
+		{
+			ft_printf(2, "Error: Could not load door texture: %s\n", game->texture.door);
+			return (0);
+		}
+	}
+	else
+	{
+		game->texture.door_img = NULL;
+	}
+	
 	return (1);
 }

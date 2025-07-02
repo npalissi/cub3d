@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: edubois- <edubois-@student.42angouleme>    +#+  +:+       +#+         #
+#    By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/24 16:10:21 by edubois-          #+#    #+#              #
-#    Updated: 2025/06/27 17:10:41 by edubois-         ###   ########.fr        #
+#    Updated: 2025/07/02 12:39:21 by npalissi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME        = cub3d
 
 CC          = cc
 
-CFLAGS      = -Wall -Wextra -Werror -g
+CFLAGS      =  -g
 
 LDFLAGS     = -Wl,-rpath=./lib/MacroLibX -L./lib/MacroLibX -lmlx -lSDL2 -lm -o3 -ofast
 

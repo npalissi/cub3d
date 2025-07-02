@@ -38,6 +38,24 @@ float	calculate_distance(t_game *game, float ray_x, float ray_y)
 	return (sqrt(dx * dx + dy * dy));
 }
 
+// Fonction pour vérifier si une position correspond à une porte
+int is_door_at_position(t_game *game, int map_x, int map_y)
+{
+	int i;
+
+	if (!game->d)
+		return (0);
+	
+	i = 0;
+	while (game->d[i].x)
+	{
+		if (game->d[i].x == map_x && game->d[i].y == map_y)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	is_wall_hit(t_game *game, float ray_x, float ray_y)
 {
 	int	map_x;

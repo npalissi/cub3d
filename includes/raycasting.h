@@ -76,6 +76,7 @@ typedef struct s_ray
     int is_vertical;
     int wall_side;  // 0=North, 1=South, 2=West, 3=East
     float wall_x;   // Position x sur le mur pour la texture
+    int is_door;    // 1 si c'est une porte, 0 sinon
 } t_ray;
 
 typedef struct s_map
@@ -108,10 +109,12 @@ typedef struct s_texture
 	char *south;
 	char *west;
 	char *east;
+	char *door;          // Nouveau: texture pour les portes
 	mlx_image north_img;
 	mlx_image south_img;
 	mlx_image west_img;
 	mlx_image east_img;
+	mlx_image door_img;  // Nouveau: image pour les portes
 	int width;
 	int height;
 }			t_texture;
@@ -133,6 +136,23 @@ typedef struct s_render_data
 	t_ray	ray;
 	float	wall_height;
 }			t_render_data;
+
+// Structure optimisée pour le rendu avec précalculs vectoriels
+typedef struct s_optimized_render_data
+{
+	float	fov_half;
+	float	angle_step;
+	float	projection_dist;
+	float	cos_fov_half;
+	float	sin_fov_half;
+	float	ray_angle;
+	t_ray	ray;
+	float	wall_height;
+	float	player_cos;  // Précalculé
+	float	player_sin;  // Précalculé
+	float	ray_dir_x;
+	float	ray_dir_y;
+}			t_optimized_render_data;
 
 typedef struct s_minimap
 {
@@ -199,11 +219,15 @@ float get_ray_pos_x(t_game *game, float angle);
 float calculate_distance(t_game *game, float ray_x, float ray_y);
 int is_wall_hit(t_game *game, float ray_x, float ray_y);
 int	is_position_blocked(t_game *game, float x, float y);
+int is_door_at_position(t_game *game, int map_x, int map_y);
 
 /* Rendering functions */
 void init_frame_buffer(t_game *game);
 void render_frame(t_game *game);
+void render_frame_optimized(t_game *game);
 void draw_vertical_line(t_game *game, int x, float wall_height, t_ray ray);
+void draw_vertical_line_optimized(t_game *game, int x, float wall_height, t_ray ray);
+void draw_vertical_line_no_stretch(t_game *game, int x, float wall_height, t_ray ray);
 
 /* Lighting functions */
 mlx_color calculate_wall_color(mlx_color base_color);

@@ -87,6 +87,8 @@ void	cleanup_game(t_game *game)
 		mlx_destroy_image(game->mlx, game->texture.west_img);
 	if (game->texture.east_img)
 		mlx_destroy_image(game->mlx, game->texture.east_img);
+	if (game->texture.door_img)
+		mlx_destroy_image(game->mlx, game->texture.door_img);
 	if (game->mini.back)
 		mlx_destroy_image(game->mlx, game->mini.back);
 	if (game->mini.wall)
@@ -117,7 +119,9 @@ int check_full_map(t_game *game)
 			empty[0] = 0;
 		if (!empty[0])
 		{
-			if (ft_strstr(str, game->color.cl) || ft_strstr(str, game->color.fl) || ft_strstr(str, game->texture.east) || ft_strstr(str, game->texture.west) || ft_strstr(str, game->texture.south) || ft_strstr(str, game->texture.north))
+			// Vérifier si c'est une ligne de texture ou couleur valide
+			if (ft_strstr(str, "WE ") || ft_strstr(str, "EA ") || ft_strstr(str, "NO ") || ft_strstr(str, "SO ") || ft_strstr(str, "DO ") || 
+				ft_strstr(str, "F ") || ft_strstr(str, "C "))
 				continue;
 			if ((ft_strlen(str) == ft_strlen(game->map.map[0]) - 1) && first_char(str, '1'))
 				break ;
