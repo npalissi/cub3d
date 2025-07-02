@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 17:10:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/01 13:44:45 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/02 19:25:41 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	init_game(t_game *game)
 	game->mouse.y = 0;
 	game->mouse.is_press = 0;
 	game->lst_buffer = NULL;
+	init_fps(game);
 }
 
 void	close_win(int event, void *params)
@@ -59,6 +60,9 @@ void	draw_loop(void *params)
 	game = (t_game *)params;
 	move_player(&game->player, game);
 	
+	// Mettre à jour les FPS
+	update_fps(game);
+	
 	// Effacer la fenêtre avant de redessiner
 	mlx_clear_window(game->mlx, game->win, (mlx_color){{255, 0, 0, 0}});
 	
@@ -66,6 +70,9 @@ void	draw_loop(void *params)
 	render_frame(game);
 	if (game->mini.valid && game->mini.down)
 		draw_minimap(game);
+	
+	// Afficher les FPS
+	draw_fps(game);
 }
 
 bool	touch(t_game *game, float x, float y)

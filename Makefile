@@ -44,12 +44,12 @@ SRCS = \
 	srcs/player/player_utils.c\
 	srcs/raycasting/init.c\
 	srcs/raycasting/lighting.c\
-	srcs/raycasting/raycasting_utils.c\
 	srcs/raycasting/raycasting.c\
 	srcs/raycasting/render_utils.c\
 	srcs/raycasting/render.c\
 	srcs/raycasting/game.c\
 	srcs/raycasting/minimap.c\
+	srcs/raycasting/fps.c\
 
 
 OBJS_DIR = obj

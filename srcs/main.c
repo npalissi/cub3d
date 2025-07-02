@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:04:05 by edubois-          #+#    #+#             */
-/*   Updated: 2025/07/01 15:01:45 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/02 19:27:30 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	setup_hooks(t_game *game)
 	mlx_on_event(game->mlx, game->win, MLX_MOUSEUP, mouse_up, game);
 	mlx_on_event(game->mlx, game->win, MLX_MOUSEWHEEL, mouse_wheel, game);
 	mlx_add_loop_hook(game->mlx, draw_loop, game);
-	mlx_set_fps_goal(game->mlx, 60);
+	mlx_set_fps_goal(game->mlx, 1000);
 }
 
 void	cleanup_game(t_game *game)
@@ -147,11 +147,17 @@ int main(int argc, char **argv)
 	
 	if (!init_mlx(&game))
 		return (1);
-	if (!load_textures(&game) || check_full_map(&game))
+	if (!load_textures(&game) )
 	{
 		cleanup_game(&game);
 		return (1);
 	}
+	
+	// Afficher le message de chargement
+	mlx_clear_window(game.mlx, game.win, (mlx_color){{255, 0, 0, 0}});
+	mlx_color white = {{255, 255, 255, 255}};
+	mlx_string_put(game.mlx, game.win, WIDTH/2 - 80, HEIGHT/2, white, "Loading textures...");
+	
 	init_item(&game, "textures/wraith_exit.png", 1);
 	init_item(&game, "textures/wraith_walking.png", 2);
 	init_item(&game, "textures/wraith_transition.png", 3);
@@ -159,6 +165,7 @@ int main(int argc, char **argv)
 	init_minimap(&game);
 	load_map_data(&game);
 	init_frame_buffer(&game);
+	init_game(&game);
 	setup_hooks(&game);
 	
 	mlx_loop(game.mlx);

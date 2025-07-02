@@ -3,84 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   render_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/01 10:21:30 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/02 19:23:14 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/raycasting.h"
 
-// Structure définie dans raycasting.h - pas besoin de redéfinir
-
-static void	init_render_data_optimized(t_optimized_render_data *data, t_game *game)
-{
-	data->fov_half = PI / 6.0f;  // 60 degrés FOV
-	data->angle_step = (PI / 3.0f) / WIDTH;
-	data->projection_dist = (WIDTH / 2.0f) / tan(data->fov_half);
-	
-	// Précalculs trigonometriques (optimisation majeure)
-	data->cos_fov_half = cos(data->fov_half);
-	data->sin_fov_half = sin(data->fov_half);
-	data->player_cos = cos(game->player.angle);
-	data->player_sin = sin(game->player.angle);
-}
-
-// Version de compatibilité
-static void	init_render_data(t_render_data *data)
-{
-	data->fov_half = PI / 6;
-	data->angle_step = (PI / 3) / WIDTH;
-	data->projection_dist = (WIDTH / 2) / tan(data->fov_half);
-}
-
-// Version optimisée avec calculs vectoriels
-static void	process_ray_optimized(t_game *game, t_optimized_render_data *data, int x)
-{
-	// Calcul angle avec lookup précalculé
-	data->ray_angle = game->player.angle - data->fov_half + (x * data->angle_step);
-	
-	// Précalcul des directions de rayon
-	data->ray_dir_x = cos(data->ray_angle);
-	data->ray_dir_y = sin(data->ray_angle);
-	
-	// Cast du rayon avec la nouvelle implémentation DDA
-	data->ray = cast_ray(game, data->ray_angle);
-	
-	// Validation et clamping corrigés pour éviter déformation
-	data->ray.dist = (data->ray.dist == INFINITY || data->ray.dist <= 0) ? 1000.0f : data->ray.dist;
-	// Distance minimale plus petite pour éviter le clamping agressif
-	data->ray.dist = (data->ray.dist < 0.1f) ? 0.1f : data->ray.dist;
-	
-	// Calcul hauteur mur corrigé
-	data->wall_height = (BLOCK_SIZE * data->projection_dist) / data->ray.dist;
-	
-	// Limitation plus raisonnable pour éviter l'étirement
-	data->wall_height = (data->wall_height > HEIGHT * 8) ? HEIGHT * 8 : data->wall_height;
-	data->wall_height = (data->wall_height < 1.0f) ? 1.0f : data->wall_height;
-}
-
-// Version compatible pour API existante
-static void	process_ray(t_game *game, t_render_data *data, int x)
-{
-	data->ray_angle = game->player.angle - data->fov_half + (x * data->angle_step);
-	data->ray = cast_ray(game, data->ray_angle);
-	
-	if (data->ray.dist == INFINITY || data->ray.dist <= 0)
-		data->ray.dist = 1000.0f;
-	// Distance minimale réduite pour éviter clamping
-	if (data->ray.dist < 0.1f)
-		data->ray.dist = 0.1f;
-	
-	data->wall_height = (BLOCK_SIZE * data->projection_dist) / data->ray.dist;
-	
-	// Limites ajustées pour éviter déformation
-	if (data->wall_height > HEIGHT * 8)
-		data->wall_height = HEIGHT * 8;
-	if (data->wall_height < 1.0f)
-		data->wall_height = 1.0f;
-}
+// Fonctions de sprite rendering pour ttranche
 
 
 typedef struct 
@@ -195,69 +127,5 @@ void	draw_sprinting_kunai(t_game *game, bool is_moving)
 }
 
 
-// Version hautement optimisée du rendu avec boucle déroulée et SIMD-friendly
-void	render_frame_optimized(t_game *game)
-{
-	t_optimized_render_data	data;
-	int						x;
-	static bool				has_exit = false;
-	static bool				has_trans = false;
-	bool					is_moving;
-	
-	// Initialisation avec précalculs
-	init_render_data_optimized(&data, game);
-	
-	// Rendu par blocs pour optimiser la cache localité
-	const int BLOCK_SIZE_RENDER = 8;  // Rendu par blocs de 8 pixels
-	
-	// Boucle principale optimisée
-	for (x = 0; x < WIDTH; x += BLOCK_SIZE_RENDER)
-	{
-		int end_x = (x + BLOCK_SIZE_RENDER > WIDTH) ? WIDTH : x + BLOCK_SIZE_RENDER;
-		
-		// Traitement par blocs (cache-friendly)
-		for (int block_x = x; block_x < end_x; block_x++)
-		{
-			process_ray_optimized(game, &data, block_x);
-			draw_vertical_line_optimized(game, block_x, data.wall_height, data.ray);
-		}
-	}
-	
-	// Rendu des sprites (inchangé pour compatibilité)
-	is_moving = game->player.key_up || game->player.key_down || 
-				game->player.key_left || game->player.key_right;
-	
-	if (game->bar.valid[1] && game->bar.valid[2] && game->bar.valid[3] && !game->bar.wheel)
-	{
-		if (is_moving && !has_exit)
-			draw_exit_kunai(game, &has_exit);
-		
-		if (has_exit)
-		{
-			if (!has_trans)
-				draw_transition(game, &has_trans);
-			else
-				draw_sprinting_kunai(game, is_moving);
-		}
-		
-		if (!is_moving)
-		{
-			has_exit = false;
-			has_trans = false;
-		}
-	}
-	else if (game->bar.valid[0] && game->bar.wheel)
-	{
-		draw_crow(game);
-	}
-	
-	// Transfert optimisé vers l'écran
-	mlx_pixel_put_region(game->mlx, game->win, 0, 0, WIDTH, HEIGHT, game->frame_buffer);
-}
-
-// Version de compatibilité qui utilise la nouvelle implémentation
-void	render_frame(t_game *game)
-{
-	render_frame_optimized(game);
-}
+// render_frame() moved to render.c
 

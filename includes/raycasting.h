@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 16:32:23 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/01 14:32:18 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/02 19:28:05 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@
 
 #define TILE_SIZE 25
 
-#define WIDTH 1000
-#define HEIGHT 1000
+#define WIDTH 1920
+#define HEIGHT 1080
 
 #define PI 3.14159265359
 
@@ -127,32 +127,7 @@ typedef struct s_mouse
 }			t_mouse;
 
 
-typedef struct s_render_data
-{
-	float	fov_half;
-	float	angle_step;
-	float	projection_dist;
-	float	ray_angle;
-	t_ray	ray;
-	float	wall_height;
-}			t_render_data;
-
-// Structure optimisée pour le rendu avec précalculs vectoriels
-typedef struct s_optimized_render_data
-{
-	float	fov_half;
-	float	angle_step;
-	float	projection_dist;
-	float	cos_fov_half;
-	float	sin_fov_half;
-	float	ray_angle;
-	t_ray	ray;
-	float	wall_height;
-	float	player_cos;  // Précalculé
-	float	player_sin;  // Précalculé
-	float	ray_dir_x;
-	float	ray_dir_y;
-}			t_optimized_render_data;
+// Minimap structure
 
 typedef struct s_minimap
 {
@@ -179,6 +154,15 @@ typedef struct s_crowbar
 	bool 				wheel;
 }	t_crowbar;
 
+typedef struct s_fps
+{
+	long long last_time;
+	long long current_time;
+	int frame_count;
+	int fps;
+	long long fps_timer;
+}			t_fps;
+
 typedef struct s_game
 {
 	void *mlx;
@@ -196,6 +180,7 @@ typedef struct s_game
 	t_door *d;
 	int zone_cx; // centre de la zone actuelle (x en blocs)
     int zone_cy;
+	t_fps fps_data;
 }			t_game;
 
 void pos_mouse(t_game *game);
@@ -214,19 +199,12 @@ void mouse_down(int button, void *params);
 
 /* Raycasting functions */
 t_ray cast_ray(t_game *game, float angle);
-float get_ray_pos_y(t_game *game, float angle);
-float get_ray_pos_x(t_game *game, float angle);
-float calculate_distance(t_game *game, float ray_x, float ray_y);
-int is_wall_hit(t_game *game, float ray_x, float ray_y);
-int	is_position_blocked(t_game *game, float x, float y);
+void render_frame_ttranche(t_game *game);
 int is_door_at_position(t_game *game, int map_x, int map_y);
 
 /* Rendering functions */
 void init_frame_buffer(t_game *game);
 void render_frame(t_game *game);
-void render_frame_optimized(t_game *game);
-void draw_vertical_line(t_game *game, int x, float wall_height, t_ray ray);
-void draw_vertical_line_optimized(t_game *game, int x, float wall_height, t_ray ray);
 void draw_vertical_line_no_stretch(t_game *game, int x, float wall_height, t_ray ray);
 
 /* Lighting functions */
@@ -242,6 +220,17 @@ void load_map_data(t_game *game);
 bool touch(t_game *game, float x, float y);
 void cleanup_game(t_game *game);
 int load_textures(t_game *game);
+
+/* FPS functions */
+void init_fps(t_game *game);
+void update_fps(t_game *game);
+void draw_fps(t_game *game);
+
+/* Sprite functions */
+void draw_crow(t_game *game);
+void draw_exit_kunai(t_game *game, bool *done);
+void draw_transition(t_game *game, bool *done);
+void draw_sprinting_kunai(t_game *game, bool is_moving);
 
 // minimap function
 void	init_minimap(t_game *game);

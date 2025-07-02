@@ -1,8 +1,8 @@
-NO ./textures/north.jpeg
-SO ./textures/south.jpeg
-WE ./textures/west.jpeg
-EA ./textures/east.jpeg
-DO ./textures/wall_backroom.png
+NO ./textures/ancient_debris_side.png
+SO ./textures/ancient_debris_side.png
+WE ./textures/ancient_debris_side.png
+EA ./textures/ancient_debris_side.png
+DO ./textures/spruce_trapdoor.png
 
 F 220,110,0
 C 225,30,0
