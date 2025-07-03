@@ -224,7 +224,7 @@ t_ray cast_ray(t_game *game, float angle)
 // Fonction supprimée - utilisation directe de cast_ray()
 
 // Fonction de rendu optimisée selon leur approche
-void render_frame_ttranche(t_game *game)
+void render_frame(t_game *game)
 {
 	int x;
 	float fov = PI / 3.0f; // 60 degrés total FOV

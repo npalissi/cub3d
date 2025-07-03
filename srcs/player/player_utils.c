@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/01 10:23:25 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/03 00:19:21 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,10 @@ void	update_move_player(float x, float y, t_game *game)
 	int		grid_x;
 	int		grid_y;
 
-		
 	new_pos_x = game->player.x + x;
 	new_pos_y = game->player.y + y;
 	grid_x = (int)(new_pos_x / BLOCK_SIZE);
 	grid_y = (int)(new_pos_y / BLOCK_SIZE);
-	
 	if (grid_x >= 0 && grid_x < game->map.w
 		&& grid_y >= 0 && grid_y < game->map.h
 		&& game->map.map[grid_y][grid_x] == '0')

@@ -6,7 +6,7 @@
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 23:52:45 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/02 22:16:47 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/03 00:19:09 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	init_player(t_player *player)
 	player->left_rotate = false;
 	player->right_rotate = false;
 }
-
 
 void	key_press(int keycode, void *params)
 {
@@ -47,7 +46,6 @@ void	key_press(int keycode, void *params)
 	if (keycode == ESC)
 		mlx_loop_end(game->mlx);
 }
-
 
 void	key_release(int keycode, void *params)
 {

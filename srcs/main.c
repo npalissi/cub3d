@@ -6,111 +6,72 @@
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 17:04:05 by edubois-          #+#    #+#             */
-/*   Updated: 2025/07/02 22:56:08 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/03 03:22:07 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/raycasting.h"
 
-static int	init_mlx(t_game *game)
+int	is_empty_line(char *str)
 {
-	mlx_window_create_info info = {0};
+	int	i;
 
-	game->mlx = mlx_init();
-	if (!game->mlx)
-	{
-		ft_printf(2, "Error: Failed to initialize MLX\n");
-		return (0);
-	}
-	info.title = "Cub3D";
-	info.width = WIDTH;
-	info.height = HEIGHT;
-	info.is_resizable = false;
-	game->win = mlx_new_window(game->mlx, &info);
-	if (!game->win)
-	{
-		ft_printf(2, "Error: Failed to create window\n");
-		mlx_destroy_context(game->mlx);
-		return (0);
-	}
-	return (1);
-}
-
-static void	setup_hooks(t_game *game)
-{
-	mlx_on_event(game->mlx, game->win, MLX_WINDOW_EVENT, close_win, game);
-	mlx_on_event(game->mlx, game->win, MLX_KEYDOWN, key_press, game);
-	mlx_on_event(game->mlx, game->win, MLX_KEYUP, key_release, game);
-	mlx_add_loop_hook(game->mlx, draw_loop, game);
-	mlx_set_fps_goal(game->mlx, 60);
-}
-
-void	cleanup_game(t_game *game)
-{
-
-	if (game->color.cl)
-		dh_free(game->color.cl);
-	if (game->color.cl)
-		dh_free(game->color.cl);
-	ft_free_tab(game->map.full_map);
-	if (game->frame_buffer)
-		free(game->frame_buffer);
-	if (game->texture.north_img)
-		mlx_destroy_image(game->mlx, game->texture.north_img);
-	if (game->texture.south_img)
-		mlx_destroy_image(game->mlx, game->texture.south_img);
-	if (game->texture.west_img)
-		mlx_destroy_image(game->mlx, game->texture.west_img);
-	if (game->texture.east_img)
-		mlx_destroy_image(game->mlx, game->texture.east_img);
-	if (game->win)
-		mlx_destroy_window(game->mlx, game->win);
-	if (game->mlx)
-		mlx_destroy_context(game->mlx);
-}
-
-int check_full_map(t_game *game)
-{
-	char *str;
-	int empty[2];
-	int i;
-	
-	empty[1] = 0;
-	while (*game->map.full_map)
-	{
-		empty[0] = 1;
-		str = *game->map.full_map++;
-		i = 0;
-		while (str[i] && ft_iswhitespace(str[i]))
+	i = 0;
+	while (str[i] && ft_iswhitespace(str[i]))
 		i++;
-		if (str[i])	
-			empty[0] = 0;
-		if (!empty[0])
-		{
-			--game->mini.skipped;
-			if (!game->mini.skipped)
-				break ;
-			if ((ft_strstr(str, game->color.cl) || ft_strstr(str, game->color.fl) || ft_strstr(str, game->texture.north) || ft_strstr(str, game->texture.south) || 
-				ft_strstr(str, game->texture.east) || ft_strstr(str, game->texture.west)) && (ft_strchr("NSWEFC",  str[0])))
-				continue;
-			else
-				empty[1] += ft_printf(2, "Error, files must be clean, " RED"%s\n"RESET, str);
-		}
-		}
-	return (empty[1]);
+	return (str[i] == '\0');
 }
 
-int main(int argc, char **argv)
+int	match_key(t_game *game, char *str)
 {
-	t_game game = {0};
+	if (ft_strstr(str, game->color.cl)
+		|| ft_strstr(str, game->color.fl)
+		|| ft_strstr(str, game->texture.north)
+		|| ft_strstr(str, game->texture.south)
+		|| ft_strstr(str, game->texture.east)
+		|| ft_strstr(str, game->texture.west))
+		return (1);
+	return (0);
+}
 
+int    check_full_map(t_game *game)
+{
+    char    *str;
+    int        empty[2];
+
+    empty[1] = 0;
+    while (*game->map.full_map)
+    {
+        empty[0] = 1;
+        str = *game->map.full_map++;
+        empty[0] = is_empty_line(str);
+        if (!empty[0])
+        {
+            --game->skipped;
+            if (!game->skipped)
+                break ;
+            if (match_key(game, str))
+                continue ;
+            else
+                empty[1] += ft_printf(2, "Error, files must be clean,"
+                        RED"%s\n"RESET, str);
+        }
+    }
+    return (empty[1]);
+}
+
+int	main(int argc, char **argv)
+{
+	t_game	game;
+
+	game = (t_game){0};
 	if (argc != 2)
 	{
 		ft_printf(2, "Usage: %s <map.cub>\n", argv[0]);
 		return (1);
 	}
-	if (!get_map(argv[1], &game) || !get_textures(&game) || 
-		!get_colors(&game) || !cut_map(&game))
+	if (!get_map(argv[1], &game) || !get_textures(&game)
+		|| !get_colors(&game) || !cut_map(&game))
 		return (1);
 	if (!init_mlx(&game))
 		return (1);
@@ -119,19 +80,11 @@ int main(int argc, char **argv)
 		cleanup_game(&game);
 		return (1);
 	}
-	
-	// Afficher le message de chargement
-	mlx_clear_window(game.mlx, game.win, (mlx_color){{255, 0, 0, 0}});
-	mlx_color white = {{255, 255, 255, 255}};
-	mlx_string_put(game.mlx, game.win, WIDTH/2 - 80, HEIGHT/2, white, "Loading textures...");
-	
 	load_map_data(&game);
 	init_frame_buffer(&game);
 	init_game(&game);
 	setup_hooks(&game);
-	
 	mlx_loop(game.mlx);
-	
 	cleanup_game(&game);
 	return (0);
 }

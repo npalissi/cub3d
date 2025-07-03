@@ -6,7 +6,7 @@
 #    By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/24 16:10:21 by edubois-          #+#    #+#              #
-#    Updated: 2025/07/02 22:05:15 by npalissi         ###   ########.fr        #
+#    Updated: 2025/07/02 23:43:46 by npalissi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,11 +54,17 @@ SRCS_BONUS = \
 
 SRCS = \
 	srcs/main.c \
+	srcs/cleanup.c \
+	srcs/init_mlx.c \
 	srcs/utils/print_utils.c \
 	srcs/raycasting/init.c \
 	srcs/raycasting/game.c \
-	srcs/raycasting/raycasting.c \
+	srcs/raycasting/texture_loader.c \
+	srcs/raycasting/raycast_utils.c \
+	srcs/raycasting/ray_calculation.c \
+	srcs/raycasting/ray_rendering.c \
 	srcs/raycasting/render.c \
+	srcs/raycasting/render_utils.c \
 	srcs/player/player.c \
 	srcs/player/player_move.c \
 	srcs/player/player_utils.c \
@@ -97,7 +103,7 @@ $(NAME): $(OBJS)
 	@echo 
 	@echo "\033[1;34mCleaning terminal...\033[0m"
 	@sleep 0.8;
-	@clear
+	# @clear
 
 bonus: $(NAME_BONUS)
 

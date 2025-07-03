@@ -6,7 +6,7 @@
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/02 22:06:18 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/03 10:51:09 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	fill_item(t_game *game, char path[50], int type)
 	if (!game->bar.item[type])
 	{
 		if (!type)
-			ft_printf(2, "Error: failed to load crowbar image\n");
+			ft_printf(2, "Error: failed to load crowbar 	image\n");
 			else
 			ft_printf(2, "Error: failed to load kunai image %d\n", type);
 		game->bar.valid[type] = 0;

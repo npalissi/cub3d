@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parse_colors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 12:53:49 by edubois-          #+#    #+#             */
-/*   Updated: 2025/06/25 10:56:54 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/03 01:46:37 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-mlx_color make_rgb(int *overflow, char **rgb)
+mlx_color	make_rgb(int *overflow, char **rgb)
 {
-	int hex;
-	mlx_color color;
-	
+	int			hex;
+	mlx_color	color;
+
 	hex = 0;
 	if (ft_arraylen(rgb) != 3)
 		*overflow = 2;
@@ -34,14 +34,15 @@ mlx_color make_rgb(int *overflow, char **rgb)
 	color.b = hex;
 	color.a = 255;
 	ft_free_tab(rgb);
-	return (color);	
+	return (color);
 }
 
-mlx_color rgba_to_hex(char *color, int *overflow)
+mlx_color	rgba_to_hex(char *color, int *overflow)
 {
-	char **rgb;
-	mlx_color result = {0};
-	
+	char		**rgb;
+	mlx_color	result;
+
+	result = (mlx_color){0};
 	rgb = ft_split(color, ',');
 	if (!rgb || ft_arraylen(rgb) != 3)
 	{
@@ -50,4 +51,3 @@ mlx_color rgba_to_hex(char *color, int *overflow)
 	}
 	return (make_rgb(overflow, rgb));
 }
-

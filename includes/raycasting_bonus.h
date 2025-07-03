@@ -6,7 +6,7 @@
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 16:32:23 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/02 21:56:18 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/03 03:36:01 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,16 @@ typedef struct s_vecd {
 	double y;
 } t_vecd;
 
-typedef struct s_ray_tt {
+typedef struct s_ray {
 	t_vecd st_cos;  // Step vector for cos intersections
 	t_vecd st_sin;  // Step vector for sin intersections  
 	double ln_cos;  // Length of cos ray
 	double ln_sin;  // Length of sin ray
-} t_ray_tt;
+} t_ray;
 
-typedef struct s_trace_tt {
-	t_ray_tt ray;
-	t_ray_tt step;
+typedef struct s_trace {
+	t_ray ray;
+	t_ray step;
 	t_vecd ref;     // Reference position (player)
 	float cos_a;    // cos(angle)
 	float sin_a;    // sin(angle)
@@ -64,7 +64,7 @@ typedef struct s_trace_tt {
 	int map_y;      // Map position Y
 	int wall_side;  // 0=N, 1=S, 2=W, 3=E
 	float tex_offset; // Texture offset [0-1]
-} t_trace_tt;
+} t_trace;
 
 typedef struct s_player
 {
@@ -230,7 +230,7 @@ void mouse_down(int button, void *params);
 
 /* Raycasting functions */
 t_ray cast_ray(t_game *game, float angle);
-void render_frame_ttranche(t_game *game);
+void render_frame(t_game *game);
 int is_door_at_position(t_game *game, int map_x, int map_y);
 
 /* Rendering functions */

@@ -6,7 +6,7 @@
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 00:00:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/02 22:06:18 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/03 03:36:01 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,5 @@ void	draw_vertical_line_no_stretch(t_game *game, int x, float wall_height, t_ray
 // Fonction principale de rendu - utilise uniquement ttranche
 void	render_frame(t_game *game)
 {
-	render_frame_ttranche(game);
+	render_frame(game);
 }
