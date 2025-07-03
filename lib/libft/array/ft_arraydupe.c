@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_arraydupe.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npalissi <npalissi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edubois- <edubois-@student.42angouleme>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:32:32 by npalissi          #+#    #+#             */
-/*   Updated: 2025/03/12 14:43:42 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/03 01:02:20 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	**ft_arraydupe(char **tab)
 	if (!new_tab)
 		return (0);
 	save_new_tab = new_tab;
-	while (*tab)
+	while (tab && *tab)
 	{
 		*new_tab = ft_strdup(*tab++);
 		if (!new_tab++)

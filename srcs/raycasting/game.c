@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 17:10:00 by npalissi          #+#    #+#             */
-/*   Updated: 2025/07/01 13:44:45 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/02 21:49:00 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 void	init_game(t_game *game)
 {
-	game->mouse.x = 0;
-	game->mouse.y = 0;
-	game->mouse.is_press = 0;
 	game->lst_buffer = NULL;
 }
 
@@ -26,31 +23,8 @@ void	close_win(int event, void *params)
 
 	game = (t_game *)params;
 	if (event == 0)
-	{
 		mlx_loop_end(game->mlx);
-	}
 }
-void	manage_door(t_game *game)
-{
-	int i;
-
-	i = 0;
-	while (game->d[i].x)
-	{
-		if (game->d[i].pressed && game->bar.wheel)
-		{
-			game->map.map[game->d[i].y][game->d[i].x] = '0';
-			game->mini.map[game->d[i].y][game->d[i].x] = '0';
-		}
-		else if (!game->d[i].pressed)
-		{
-			game->map.map[game->d[i].y][game->d[i].x] = '1';
-			game->mini.map[game->d[i].y][game->d[i].x] = '1';
-		}
-		i++;
-	}
-}
-
 
 void	draw_loop(void *params)
 {
@@ -59,13 +33,9 @@ void	draw_loop(void *params)
 	game = (t_game *)params;
 	move_player(&game->player, game);
 	
-	// Effacer la fenêtre avant de redessiner
 	mlx_clear_window(game->mlx, game->win, (mlx_color){{255, 0, 0, 0}});
 	
-	manage_door(game);
 	render_frame(game);
-	if (game->mini.valid && game->mini.down)
-		draw_minimap(game);
 }
 
 bool	touch(t_game *game, float x, float y)
@@ -146,6 +116,5 @@ int	load_textures(t_game *game)
 		ft_printf(2, "Error: Could not load east texture: %s\n", game->texture.east);
 		return (0);
 	}
-	
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_map.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:58:51 by edubois-          #+#    #+#             */
-/*   Updated: 2025/07/01 14:43:40 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/02 22:23:25 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int get_map(char *file, t_game *game)
     map.full_map = ft_arraydupe(map.map);
     if (!parse_occu(map.map) || !parse_map(map.map, game))
         return (0);
+    
     game->map = map;
     return (1);
 }

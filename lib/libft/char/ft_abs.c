@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_abs.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edubois- <edubois-@student.42angouleme>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 11:38:59 by edubois-          #+#    #+#             */
-/*   Updated: 2025/07/01 11:42:42 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/03 00:09:27 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_abs(int a)
+int	ft_abs(int a)
 {
-    if (a < 0)
-        return (-a);
-    return (a);
+	if (a < 0)
+		return (-a);
+	return (a);
 }

@@ -1,3 +1,4 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -81,12 +82,12 @@ int parse_map(char **map, t_game *game)
 	i = 0;
 	while (map[i] && !first_char(map[i], '1'))
 		i++;
+	game->mini.skipped = i - 2;
 	if (!map[i])
 	{
 		ft_printf(2, "Error, Need map in config file !\n");
 		return (0);
 	}
-	game->mini.map = ft_arraydupe(map + i);
 	fill_map(map, i);
 	save_map = ft_arraydupe(map);
 	if (!flood_fill(save_map, find_y(save_map, i), find_x(save_map, i),
@@ -107,7 +108,7 @@ void check_map(char *map, int *error)
 	j = 0;
 	while (map[j])
 	{
-		if (!ft_strchr("10NSWE\n", map[j]))
+		if (!ft_strchr(" 10NSWE\n", map[j]))
 		{
 			ft_printf(2, "Error, "RED"%c"RESET " must not be inside of the map !\n"
 				, map[j]);
@@ -117,23 +118,6 @@ void check_map(char *map, int *error)
 	}
 }
 
-void	get_door(t_game *game, int y)
-{
-	static int idx;
-	int x;
-	
-	x = 0;
-	while (game->map.map[y][x])
-	{
-		if (game->map.map[y][x] == 'D')
-		{
-			game->map.map[y][x] = '1';
-			game->d[idx].x = x;
-			game->d[idx++].y = y;
-		}
-		x++;
-	}
-}
 
 int	cut_map(t_game *game)
 {
@@ -146,13 +130,8 @@ int	cut_map(t_game *game)
 		&& !(first_char(*game->map.map, '0'))))
 		game->map.map++;
 	i = 0;
-	game->d = ft_calloc(sizeof(t_door) , (ft_arrayoccu(game->map.map + i, 'D') + 1));
-	game->d->pressed = false;
-	if (!game->d)
-		return (error);
     while (game->map.map[i])
     {
-		get_door(game, i);
 		check_map(game->map.map[i], &error);
         stat[0] += ft_charite(game->map.map[i], 'N');
         stat[1] += ft_charite(game->map.map[i], 'S');
@@ -166,7 +145,6 @@ int	cut_map(t_game *game)
 			" once and not %d times!\n", stat[0] + stat[1] + stat[2] + stat[3]);
 		return (0);
 	}
-	// Calculer les dimensions de la carte
 	game->map.h = i;
 	game->map.w = len_max(game->map.map);
 	return (error);

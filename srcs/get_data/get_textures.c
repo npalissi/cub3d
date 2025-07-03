@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_textures.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edubois- <edubois-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 13:53:41 by edubois-          #+#    #+#             */
-/*   Updated: 2025/06/28 16:06:57 by edubois-         ###   ########.fr       */
+/*   Updated: 2025/07/02 21:43:12 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,25 @@ void    fill_texture(t_texture *tex, int i, char *str)
         tex->east = ft_substr(str, 3, ft_strlen(str) - 2);
 }
 
-void    close_fds(int fd[4])
+void    close_fds_basic(int fd[4])
 {
     int i;
 
     i = 0;
     while (i < 4)
+    {
+        if (fd[i] > 2)
+            close(fd[i]);
+        i++;
+    }
+}
+
+void    close_fds(int fd[5])
+{
+    int i;
+
+    i = 0;
+    while (i < 5)
     {
         if (fd[i] > 2)
             close(fd[i]);
@@ -59,9 +72,36 @@ int check_texture(t_game *game)
         }
         i++;
     }
+    close_fds_basic(fd);
+    return (error);
+}
+
+int check_texture_optional(t_game *game)
+{
+    int fd[4];
+    int i;
+    char *co[4] = {"north ", "south ", "east ", "west "};
+    int error;
+
+    fd[0] = open(game->texture.north, O_RDONLY);
+    fd[1] = open(game->texture.south, O_RDONLY);
+    fd[2] = open(game->texture.east, O_RDONLY);
+    fd[3] = open(game->texture.west, O_RDONLY);
+    i = 0;
+    error = 1;
+    while (i < 4)
+    {
+        if (fd[i] == -1)
+        {
+            ft_printf(2, "Error while opening file for %s texture !\n", co[i]);
+            error = 0;
+        }
+        i++;
+    }
     close_fds(fd);
     return (error);
 }
+
 
 int get_textures(t_game *game)
 {
