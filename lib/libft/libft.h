@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: npalissi <npalissi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edubois- <edubois-@student.42angouleme>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 16:58:32 by edubois-          #+#    #+#             */
-/*   Updated: 2025/03/25 19:22:00 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/02 23:47:36 by edubois-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	*ft_memchr(const void *s, int c, size_t n);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void	*ft_memmove(void *dest, const void *src, size_t n);
 char	*ft_strchr(const char *s, int c);
+int		first_char(char *str, char c);
 void	*ft_memset(void *s, int c, size_t n);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 void	ft_bzero(void *s, size_t n);
@@ -53,6 +54,8 @@ int		ft_isdigit(int number);
 int		ft_isprint(int c);
 int		ft_isascii(int c);
 int		ft_tolower(int letter);
+void	ft_array_replace(char **array, char *items, char c);
+int		ft_arrayoccu(char **tab, int c);
 int		ft_toupper(int letter);
 void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_strdup(const char *s);
@@ -60,10 +63,13 @@ char	*ft_strndup(char *s, int size, int is_free);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoinfree(char *s1, char *s2, int type_free);
 char	*ft_strtrim(char const *s1, char const *set);
+void	ft_print_array(char **str);
 char	**ft_split(char const *s, char c);
 char	*ft_itoa(int n);
+int		ft_abs(int a);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
+int		ft_charite(char *str, char c);
 void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);

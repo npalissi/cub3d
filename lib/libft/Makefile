@@ -2,12 +2,16 @@ SRCS := array/ft_arraydupe.c\
 		array/ft_arraylen.c\
 		array/ft_free_tab.c\
 		array/ft_split.c\
+		array/ft_array_replace.c\
+		array/ft_arrayoccu.c\
 		char/ft_isalnum.c\
 		char/ft_isalpha.c\
 		char/ft_isascii.c\
 		char/ft_isdigit.c\
 		char/ft_isprint.c\
+		char/ft_charite.c\
 		char/ft_issign.c\
+		char/ft_abs.c\
 		char/ft_iswhitespace.c\
 		lst/ft_lstadd_back_bonus.c\
 		lst/ft_lstadd_front_bonus.c\
@@ -26,10 +30,11 @@ SRCS := array/ft_arraydupe.c\
 		put/ft_putchar_fd.c\
 		put/ft_putendl_fd.c\
 		put/ft_putnbr_fd.c\
+		put/ft_print_array.c\
 		put/ft_putstr_fd.c\
 		string/ft_atoi.c\
-		string/ft_buildstr.c\
 		string/ft_itoa.c\
+		string/ft_first_char.c\
 		string/ft_strapp.c\
 		string/ft_strchr.c\
 		string/ft_strcmp.c\
@@ -50,7 +55,7 @@ SRCS := array/ft_arraydupe.c\
 		destructor_handler/ft_deshandler.c
 
 CC := cc
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -g
 OBJS := $(SRCS:.c=.o)
 
 NAME := libft.a

@@ -6,127 +6,82 @@
 /*   By: npalissi <npalissi@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 16:43:09 by npalissi          #+#    #+#             */
-/*   Updated: 2025/03/26 20:27:15 by npalissi         ###   ########.fr       */
+/*   Updated: 2025/07/03 03:03:35 by npalissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
-#define CUB3D_H
-#include "../MacroLibX/includes/mlx.h"
-#include <stdio.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <math.h>
-#include "../lib/libft/libft.h"
+# define CUB3D_H
 
-#include "../MacroLibX/includes/mlx.h"
-#include "../MacroLibX/includes/mlx_extended.h"
+# define WALL '1'
+# define EMPTY '0'
+# define VISITED 'F'
 
-#define W 26
-#define A 4
-#define S 22
-#define D 7
-#define ESC 41
-#define BLOCK_SIZE 64
-#define LEFT 80
-#define RIGHT 79
+// Reset
+# define RESET       "\033[0m"
 
-#define WIDTH 1000
-#define HEIGHT 1000
+// Regular Colors
+# define BLACK       "\033[0;30m"
+# define RED         "\033[0;31m"
+# define GREEN       "\033[0;32m"
+# define YELLOW      "\033[0;33m"
+# define BLUE        "\033[0;34m"
+# define MAGENTA     "\033[0;35m"
+# define CYAN        "\033[0;36m"
+# define WHITE       "\033[0;37m"
 
-#define PI 3.14159265359
+// Bold
+# define BBLACK      "\033[1;30m"
+# define BRED        "\033[1;31m"
+# define BGREEN      "\033[1;32m"
+# define BYELLOW     "\033[1;33m"
+# define BBLUE       "\033[1;34m"
+# define BMAGENTA    "\033[1;35m"
+# define BCYAN       "\033[1;36m"
+# define BWHITE      "\033[1;37m"
 
+# include "../MacroLibX/includes/mlx.h"
+# include "raycasting.h"
+# include <stdio.h>
+# include <fcntl.h>
+# include <sys/time.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <math.h>
+# include <sys/mman.h>
 
+# include "../lib/libft/libft.h"
+# include "../lib/printf_fd/ft_printf.h"
+# include "../lib/gnl/get_next_line.h"
 
-typedef struct s_player
-{
-	float x;
-	float y;
-	float dir;
-	float angle;
-	float cos_angle;
-	float sin_angle;
-	
-	bool left_rotate;
-	bool right_rotate;
-	bool key_up;
-	bool key_down;
-	bool key_left;
-	bool key_right;
-}				t_player;
+# include "../lib/MacroLibX/includes/mlx.h"
+# include "../lib/MacroLibX/includes/mlx_extended.h"
 
-typedef struct s_ray
-{
-    float x;
-    float y;
-    float cos_angle;
-    float sin_angle;
-    float dist;
-} t_ray;
+// Forward declarations - les vraies structures sont dans raycasting.h
+typedef struct s_map		t_map;
+typedef struct s_color		t_color;
+typedef struct s_texture	t_texture;
+typedef struct s_game		t_game;
 
-typedef struct s_map
-{
-	char **map;
-	char *str;
-	int w;
-	int h;
-}				t_map;
+// get_data
+int			get_map(char *file, t_game *game);
+int			get_textures(t_game *game);
+int			get_colors(t_game *game);
 
-typedef struct	s_buffer
-{
-	char			buffer[5];
-	struct s_buffer	*next;
+// parsing
+int			parse_map(char **map, t_game *game);
+int			len_max(char **str);
+int			find_x(char **map, int i);
+int			find_y(char **map, int i);
+void		check_map(char *map, int *error);
+int			cut_map(t_game *game);
+int			count_occurrences(char *key, char **map);
+int			parse_occu(char **map);
+mlx_color	rgba_to_hex(char *color, int *overflow);
 
-}				t_buffer;
+//utils
+void		custom_occu_print(char *key, char **map);
 
-typedef struct s_color
-{
-	unsigned int floor;
-	unsigned int ceiling;
-}				t_color;
-
-
-typedef struct s_mat
-{
-	char *north;
-	char *south;
-	char *west;
-	char *east;	
-}			t_mat;
-
-typedef struct s_mouse
-{
-	int x;
-	int y;
-	int is_press;
-}			t_mouse;
-
-
-typedef struct s_game
-{
-	void *mlx;
-	void *win;
-	void *img;
-	char *str_map;
-	t_player player;
-	t_buffer *lst_buffer;
-	t_color	color;
-	t_mat	mat;
-	t_mouse mouse;
-	t_map map;
-}			t_game;
-
-void pos_mouse(t_game *game);
-char *recover_file(t_game *game, char *name_file);
-int init_data(t_game *game);
-void draw_squar(t_game *game, int x, int y, int size);
-void key_press(int keycode, void *params);
-void key_release(int keycode, void *params);
-void move_player(t_player *player, t_game *game);
-
-void init_player(t_player *player);
-void mouse_up(int button, void *params);
-void mouse_down(int button, void *params);
+void		print_texture(t_texture t);
 
 #endif
